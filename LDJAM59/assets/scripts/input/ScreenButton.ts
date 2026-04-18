@@ -71,7 +71,7 @@ export class ScreenButton extends Component {
 	}
 
 	onDisable() {
-		this._subscribeEvents(true);
+		this._subscribeEvents(false);
 
 		gameEventTarget.emit(GameEvent.UNREGISTER_BUTTON, this);
 	}

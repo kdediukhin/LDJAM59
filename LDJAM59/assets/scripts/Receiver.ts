@@ -22,12 +22,6 @@ export class Receiver extends Component {
     }
 
     protected update(dt: number): void {
-        const time = game.totalTime * 0.001;
-        this.node.worldPosition = v3(
-            Math.sin(time) * 15,
-            Math.cos(time) * 15,
-            0,
-        );
 
         const scene = director.getScene();
         const signals = scene ? scene.getComponentsInChildren(SignalRay) : [];
@@ -41,7 +35,6 @@ export class Receiver extends Component {
         }
         if (hit !== this._isHit) {
             this._isHit = hit;
-            console.log(`[Receiver] ${hit ? 'HIT' : 'left'} signal beam`);
         }
     }
 

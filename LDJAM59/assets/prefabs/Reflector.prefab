@@ -191,6 +191,7 @@
     "__prefab": {
       "__id__": 8
     },
+    "mainCamera": null,
     "_id": ""
   },
   {

@@ -1,6 +1,8 @@
-import { _decorator, Color, Component, geometry, Node, PhysicsSystem, Vec3 } from 'cc';
+import { _decorator, Color, Component, game, geometry, Node, PhysicsSystem, Vec3 } from 'cc';
 import { Reflector } from './Reflector';
 import { SignalRenderer } from './SignalRenderer';
+import { gameEventTarget } from './plugins/GameEventTarget';
+import { GameEvent } from './enums/GameEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('SignalRay')
@@ -12,22 +14,32 @@ export class SignalRay extends Component {
     @property(SignalRenderer)
     private signalRenderer: SignalRenderer = null;
 
-    /** Начальное направление луча (локальное) */
     @property(Vec3)
     direction: Vec3 = new Vec3(1, 0, 0);
 
-    /** Максимальное количество отражений */
     @property
     maxBounces: number = 10;
 
-    /** Максимальная дальность каждого сегмента */
     @property
     maxDistance: number = 100;
 
     private _ray: geometry.Ray = new geometry.Ray();
 
-    /** Итоговые точки луча (доступны после start) */
     public rayPoints: Vec3[] = [];
+
+    protected onEnable(): void {
+        this._subscribeEvents(true);
+    }
+
+    protected onDisable(): void {
+        this._subscribeEvents(false);
+    }
+
+    private _subscribeEvents(isOn: boolean) {
+        const func = isOn ? 'on' : 'off';
+        
+        gameEventTarget[func](GameEvent.UPDATE_REFLECTION, this._castRay, this);
+    }
 
     start(): void {
         this._castRay();
@@ -40,9 +52,7 @@ export class SignalRay extends Component {
         let dir = new Vec3();
         Vec3.normalize(dir, this.direction);
 
-        points.push(origin.clone());
-        console.log('+++', this.maxBounces, this.maxDistance);
-        
+        points.push(origin.clone());        
 
         for (let bounce = 0; bounce < this.maxBounces; bounce++) {
             this._ray.o.set(origin);
@@ -53,7 +63,6 @@ export class SignalRay extends Component {
                 const endpoint = new Vec3();
                 Vec3.scaleAndAdd(endpoint, origin, dir, this.maxDistance);
                 points.push(endpoint);
-                console.log('endpoint', endpoint);
                 
                 break;
             }
@@ -61,8 +70,6 @@ export class SignalRay extends Component {
             const result = PhysicsSystem.instance.raycastClosestResult;
             const hitPoint = result.hitPoint.clone();
             const normal = result.hitNormal.clone();
-
-            console.log(`[SignalRay] bounce=${bounce} hit=${result.collider.node.name} dist=${result.distance.toFixed(3)} normal=(${normal.x.toFixed(2)},${normal.y.toFixed(2)},${normal.z.toFixed(2)})`);
 
             points.push(hitPoint);
 
@@ -78,9 +85,7 @@ export class SignalRay extends Component {
                 Vec3.normalize(dir, reflected);
                 // Сдвигаем начало чуть вперёд вдоль отражённого направления
                 Vec3.scaleAndAdd(origin, hitPoint, dir, 0.01);
-                console.log(`[SignalRay] reflected dir=(${dir.x.toFixed(2)},${dir.y.toFixed(2)},${dir.z.toFixed(2)})`);
             } else {
-                console.log(`[SignalRay] hit non-reflector, stopping`);
                 break;
             }
         }
