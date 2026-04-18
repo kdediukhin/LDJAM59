@@ -6,6 +6,7 @@ const { ccclass, property } = _decorator;
 @ccclass('Reflector')
 export class Reflector extends Component {
 
+
     protected mainCamera: Camera = null;
 
     protected onEnable(): void {
@@ -25,7 +26,7 @@ export class Reflector extends Component {
 
     private _onTouchStart(buttonCurrPos: Vec2): void {
         if (!this.mainCamera) return;
-        
+
         const ray = new geometry.Ray();
         this.mainCamera.screenPointToRay(buttonCurrPos.x, buttonCurrPos.y, ray);
 
