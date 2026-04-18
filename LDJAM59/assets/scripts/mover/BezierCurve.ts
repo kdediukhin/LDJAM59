@@ -54,6 +54,7 @@ export class BezierCurve {
 			}
 		}
 
+		console.log(this._controlPoints);
 		for (let i = 0; i < pathNodesLength * this.pointsInSpan; i++) {
 			const time = i / this.pointsInSpan;
 
@@ -133,6 +134,7 @@ export class BezierCurve {
 	}
 
 	_setSpanCurveControl(index: number) {
+		// console.log(' set control');
 		const startPointIndex: number = index;
 		const endPointIndex: number = startPointIndex === this.pathNodes.length - 1 ? 0 : startPointIndex + 1;
 
@@ -149,7 +151,7 @@ export class BezierCurve {
 		const nCentPos = Vec2.subtract(v2(), nPos2D, cPos2D);
 		const t = Vec2.cross(nCentPos, nDir) / Vec2.cross(cDir, nDir);
 		const controlPos2D = Vec2.add(v2(), cPos2D, Vec2.multiplyScalar(v2(), cDir, t));
-
+		// debugger;
 		this._controlPoints[index] = v3(controlPos2D.x, (cPos.y + nPos.y) * .5, controlPos2D.y);
 	}
 
