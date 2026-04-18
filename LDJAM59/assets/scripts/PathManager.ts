@@ -14,12 +14,19 @@ export class PathManager extends Component {
 	// endregion
 
 	// region private fields and properties
+	_paths: Path[] = [];
 	// endregion
 
 	// region life-cycle callbacks
 	onEnable() {
 
-		this.node.children.forEach(child => child.getComponent(Path) && child.getComponent(Path).init());
+		this.node.children.forEach(child => {
+			if (child.getComponent(Path)) {
+				const path = child.getComponent(Path);
+				this._paths.push(path);
+				path.init();
+			}
+		});
 
 		this._subscribeEvents(true);
 	}
@@ -34,6 +41,9 @@ export class PathManager extends Component {
 	// endregion
 
 	// region public methods
+	getAvaliablePath(): Path {
+		return this._paths[Math.floor(Math.random() * this._paths.length)];
+	}
 	// endregion
 
 	// region private methods
