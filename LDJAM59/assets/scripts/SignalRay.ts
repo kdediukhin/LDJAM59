@@ -1,5 +1,6 @@
 import { _decorator, Color, Component, game, geometry, Node, PhysicsSystem, Vec3 } from 'cc';
 import { Reflector } from './Reflector';
+import { Amplifier } from './Amplifier';
 import { SignalRenderer } from './SignalRenderer';
 import { gameEventTarget } from './plugins/GameEventTarget';
 import { GameEvent } from './enums/GameEvent';
@@ -24,6 +25,7 @@ export class SignalRay extends Component {
     maxDistance: number = 100;
 
     private _ray: geometry.Ray = new geometry.Ray();
+    private _amplifierMap: Map<Node, number> = new Map();
 
     public rayPoints: Vec3[] = [];
 
@@ -39,31 +41,39 @@ export class SignalRay extends Component {
         const func = isOn ? 'on' : 'off';
         
         gameEventTarget[func](GameEvent.UPDATE_REFLECTION, this._castRay, this);
+        gameEventTarget[func](GameEvent.UPDATE_MAX_DISTANCE, this._onUpdateMaxDistance, this);
     }
 
     start(): void {
         this._castRay();
     }
 
+    private _onUpdateMaxDistance(node: Node, amplifyPower: number) {
+        this._amplifierMap.set(node, amplifyPower);
+    }
+
     private _castRay(): void {
         const points: Vec3[] = [];
+        const reflectorIndices: Set<number> = new Set();
 
         let origin = this.node.worldPosition.clone();
         let dir = new Vec3();
         Vec3.normalize(dir, this.direction);
 
-        points.push(origin.clone());        
+        points.push(origin.clone());
+
+        const additionalDistance = Array.from(this._amplifierMap.values()).reduce((sum, val) => sum + val, 0);
+        let remainingDistance = this.maxDistance + additionalDistance;
 
         for (let bounce = 0; bounce < this.maxBounces; bounce++) {
             this._ray.o.set(origin);
             this._ray.d.set(dir);
 
-            const hit = PhysicsSystem.instance.raycastClosest(this._ray, 0xffffffff, this.maxDistance);
+            const hit = PhysicsSystem.instance.raycastClosest(this._ray, 0xffffffff, remainingDistance);
             if (!hit) {
                 const endpoint = new Vec3();
-                Vec3.scaleAndAdd(endpoint, origin, dir, this.maxDistance);
+                Vec3.scaleAndAdd(endpoint, origin, dir, remainingDistance);
                 points.push(endpoint);
-                
                 break;
             }
 
@@ -71,10 +81,32 @@ export class SignalRay extends Component {
             const hitPoint = result.hitPoint.clone();
             const normal = result.hitNormal.clone();
 
+            remainingDistance -= result.distance;
             points.push(hitPoint);
+
+            const amplifier = result.collider.node.getComponent(Amplifier);
+            if (amplifier) {
+                gameEventTarget.emit(GameEvent.UPDATE_MAX_DISTANCE, amplifier.node, amplifier.amplifyPower);
+                remainingDistance += amplifier.amplifyPower;
+                // Кастуем сквозь усилитель, исключая его layer, чтобы найти выход из него
+                const maskWithoutAmplifier = 0xffffffff & ~amplifier.node.layer;
+                Vec3.scaleAndAdd(origin, hitPoint, dir, 0.01);
+                this._ray.o.set(origin);
+                this._ray.d.set(dir);
+                const exitHit = PhysicsSystem.instance.raycastClosest(this._ray, maskWithoutAmplifier, remainingDistance);
+                if (exitHit) {
+                    const exitResult = PhysicsSystem.instance.raycastClosestResult;
+                    remainingDistance -= exitResult.distance;
+                    Vec3.scaleAndAdd(origin, exitResult.hitPoint, dir, 0.01);
+                } else {
+                    this._amplifierMap.delete(amplifier.node);
+                }
+                continue;
+            }
 
             const reflector = result.collider.node.getComponent(Reflector);
             if (reflector) {
+                reflectorIndices.add(points.length - 1);
                 // r = d - 2*(d·n)*n
                 const dot = Vec3.dot(dir, normal);
                 const reflected = new Vec3(
@@ -88,12 +120,14 @@ export class SignalRay extends Component {
             } else {
                 break;
             }
+
+            if (remainingDistance <= 0) break;
         }
 
         this.rayPoints = points;
 
         if (this.signalRenderer) {
-            this.signalRenderer.setLinePoints(points);
+            this.signalRenderer.setLinePoints(points, reflectorIndices);
         }
     }
 }

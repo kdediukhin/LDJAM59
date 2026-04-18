@@ -128,7 +128,6 @@
         "_value": false
       },
       "render-pipeline": {
-        "_value": true,
         "_option": "custom-pipeline"
       },
       "custom-pipeline": {
@@ -145,7 +144,6 @@
       "animation",
       "audio",
       "base",
-      "custom-pipeline",
       "debug-renderer",
       "dragon-bones",
       "geometry-renderer",
@@ -168,7 +166,8 @@
       "ui",
       "video",
       "websocket",
-      "webview"
+      "webview",
+      "custom-pipeline"
     ],
     "noDeprecatedFeatures": {
       "value": false,

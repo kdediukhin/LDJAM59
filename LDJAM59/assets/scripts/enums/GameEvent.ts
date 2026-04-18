@@ -18,6 +18,7 @@ export enum GameEvent {
 	INPUT_START = 100,
 
 	UPDATE_REFLECTION = 200,
+	UPDATE_MAX_DISTANCE = 201,
 
 	
 }

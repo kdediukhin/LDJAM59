@@ -1,15 +1,10 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Amplifier')
 export class Amplifier extends Component {
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-
-    }
+    @property
+    amplifyPower: number = 50;
 }
 
 
