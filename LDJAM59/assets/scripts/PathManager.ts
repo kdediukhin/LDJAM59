@@ -1,5 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import { Path } from './mover/Path';
+import { PathRenderer } from './PathRenderer';
 const { ccclass, property } = _decorator;
 
 // region classes-helpers
@@ -15,6 +16,7 @@ export class PathManager extends Component {
 
 	// region private fields and properties
 	_paths: Path[] = [];
+	_occupationStatus: boolean[] = [];
 	// endregion
 
 	// region life-cycle callbacks
@@ -25,6 +27,12 @@ export class PathManager extends Component {
 				const path = child.getComponent(Path);
 				this._paths.push(path);
 				path.init();
+				this._occupationStatus.push(false);
+
+				this.scheduleOnce(() => {
+					path.getComponent(PathRenderer).init();
+					path.getComponent(PathRenderer).toggleMarks(false);
+				});
 			}
 		});
 
@@ -42,7 +50,32 @@ export class PathManager extends Component {
 
 	// region public methods
 	getAvaliablePath(): Path {
-		return this._paths[Math.floor(Math.random() * this._paths.length)];
+		const nonOccupiedIndecies = [];
+		for (let i = 0; i < this._occupationStatus.length; i++) {
+			if (!this._occupationStatus[i]) {
+				nonOccupiedIndecies.push(i);
+			}
+		}
+
+		const pathIndex = nonOccupiedIndecies[Math.floor(Math.random() * nonOccupiedIndecies.length)];
+		const path = this._paths[pathIndex]
+
+		return path;
+	}
+
+	changePathOccupationStatus(path: Path, status: boolean) {
+		let index;
+
+		for (let i = 0; i < this._paths.length; i++) {
+			if (path === this._paths[i]) {
+				index = i;
+			}
+		}
+
+		this._occupationStatus[index] = status;
+
+		path.getComponent(PathRenderer).toggleMarks(status);
+
 	}
 	// endregion
 

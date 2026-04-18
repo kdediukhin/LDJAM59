@@ -13,9 +13,8 @@ export enum GameEvent {
 	CAMERA_UPDATE_POSITION = 24,
 	CAMERA_FOCUS = 25,
 
-	PATH_UPDATE_POINTS = 30
-
-	
+	PATH_UPDATE_POINTS = 30,
+	ALLSCREEN_INPUT = 31	
 }
 
 Enum(GameEvent);
