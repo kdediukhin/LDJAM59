@@ -81,7 +81,6 @@ export class StarshipManager extends Component {
 		this._starships.push(starship);
 		const receiver = starship.getComponent(Receiver) ?? starship.getComponentInChildren(Receiver);
 		receiver.setColorHex(this._colorHex);
-		console.log(receiver);
 		
 		this._shipReceivers.set(starship, receiver);
 	}
@@ -94,6 +93,8 @@ export class StarshipManager extends Component {
 		// gameEventTarget[func](GameEvent.ALLSCREEN_INPUT, this.onAllscreenInput, this);
 		// gameEventTarget[func](GameEvent.RAY_HIT_RECEIVED, this.onRayHitReceived, this);
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
+		gameEventTarget[func](GameEvent.PAUSE_STARSHIPS, this.onPauseStarships, this);
+		gameEventTarget[func](GameEvent.RESUME_STARSHIPS, this.onResumeStarships, this);
 	}
 
 	_setStarshipOnPath(starship: Node, path: Path) {
@@ -170,6 +171,14 @@ export class StarshipManager extends Component {
 			}, this.relaunchInterval);
 		}
 
+	}
+
+	onPauseStarships() {
+		this._starships.forEach(starship => starship.getComponent(MoverToPoint) && starship.getComponent(MoverToPoint).pause());
+	}
+
+	onResumeStarships() {
+		this._starships.forEach(starship => starship.getComponent(MoverToPoint) && starship.getComponent(MoverToPoint).resume());
 	}
 	// endregion
 }
