@@ -135,20 +135,7 @@
     },
     "_material": null,
     "_worldSpace": true,
-    "_positions": [
-      {
-        "__type__": "cc.Vec3",
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      {
-        "__type__": "cc.Vec3",
-        "x": 5,
-        "y": 0,
-        "z": 0
-      }
-    ],
+    "_positions": [],
     "_width": {
       "__id__": 5
     },
@@ -200,6 +187,7 @@
     "__prefab": {
       "__id__": 8
     },
+    "scrollSpeed": 1,
     "_id": ""
   },
   {
@@ -231,13 +219,7 @@
     "__prefab": {
       "__id__": 11
     },
-    "color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
+    "colorHex": "#FF0000",
     "signalRenderer": {
       "__id__": 7
     },
@@ -248,7 +230,7 @@
       "z": 0
     },
     "maxBounces": 10,
-    "maxDistance": 100,
+    "maxDistance": 20,
     "_id": ""
   },
   {

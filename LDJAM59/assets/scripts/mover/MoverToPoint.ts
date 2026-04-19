@@ -23,6 +23,7 @@ export class MoverToPoint extends Component {
 	public moveEndCallback: Function = null;
 	
 	public hasArrived: boolean = true;
+	public isPaused: boolean = false;
 	// endregion
 
 	// region private fields and properties
@@ -38,7 +39,7 @@ export class MoverToPoint extends Component {
 	}
 
 	update(deltaTime: number) {
-		if (!this.hasArrived) {
+		if (!this.hasArrived && !this.isPaused) {
 			if (this.movingEntity.targetPoint && !this.hasArrived) {
 				const direction: Vec3 = Vec3.subtract(new Vec3(), this.movingEntity.targetPoint, this.movingEntity.node.worldPosition);
 				const distanceToTarget: number = Vec3.distance(this.movingEntity.node.worldPosition, this.movingEntity.targetPoint);
@@ -160,6 +161,14 @@ export class MoverToPoint extends Component {
 
 	stop() {
 		this.hasArrived = true;
+	}
+
+	pause() {
+		this.isPaused = true;
+	}
+
+	resume() {
+		this.isPaused = false;
 	}
 	// endregion
 
