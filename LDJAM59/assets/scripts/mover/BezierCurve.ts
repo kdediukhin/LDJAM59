@@ -54,7 +54,6 @@ export class BezierCurve {
 			}
 		}
 
-		console.log(this._controlPoints);
 		for (let i = 0; i < pathNodesLength * this.pointsInSpan; i++) {
 			const time = i / this.pointsInSpan;
 
@@ -110,6 +109,83 @@ export class BezierCurve {
 	getFullPath() {
 		return { points: this._pathPoints, rotations: this._pathRotations };
 	}
+
+	getFullPathLength(): number {
+		let pathLength: number = 0;
+
+		for (let i = 0; i < this._pathPoints.length; i++) {
+			const startPoint: Vec3 = this._pathPoints[i];
+			
+			if (this._pathPoints[i + 1]) {
+				const endPoint: Vec3 = this._pathPoints[i + 1];
+
+				pathLength += Vec3.distance(startPoint, endPoint);
+			} else {
+				continue;
+			}	
+		}
+
+		return pathLength;
+	}
+
+	getPointAngleOnDistance(distance: number) {
+		let pointIndex = 0;
+		let pathLength = 0;
+		let interPointT = 0;
+		let position = new Vec3();
+		let rotation = new Quat();
+
+		for (let i = 0; i < this._pathPoints.length - 1; i++) {
+			const startPoint: Vec3 = this._pathPoints[i];
+			const endPoint: Vec3 = this._pathPoints[i + 1];
+			
+			if (pathLength < distance) {				
+
+				pathLength += Vec3.distance(startPoint, endPoint);
+				pointIndex = i;
+			} else if (pathLength > distance) {
+				pointIndex = i - 1;
+				interPointT = 1 - (pathLength - distance)/Vec3.distance(startPoint, endPoint);
+				break;
+			} else {
+				pointIndex = i;
+				break;
+			}
+		}
+		
+		if (pointIndex == 0) {
+			position = this._pathPoints[0];
+			rotation = this._pathRotations[0];
+		} else if(pointIndex === this._pathPoints.length - 2) {
+			if (distance >= this.getFullPathLength()) {
+				position = this._pathPoints[this._pathPoints.length - 1];
+				rotation = this._pathRotations[this._pathRotations.length - 1];
+			} else {
+				const p1 = this._pathPoints[this._pathPoints.length - 2];
+				const p2 = this._pathPoints[this._pathPoints.length - 1];
+				interPointT = (distance - pathLength) / Vec3.distance(p1, p2);
+
+				Vec3.lerp(position, p1, p2, interPointT);
+
+				const q1 = this._pathRotations[this._pathRotations.length - 2];
+				const q2 = this._pathRotations[this._pathRotations.length - 1];
+
+				Quat.slerp(rotation, q1, q2, interPointT);
+			}
+		} else {
+			const p1 = this._pathPoints[pointIndex];
+			const p2 = this._pathPoints[pointIndex + 1];
+			Vec3.lerp(position, p1, p2, interPointT);
+
+			const q1 = this._pathRotations[pointIndex];
+			const q2 = this._pathRotations[pointIndex + 1];
+			Quat.slerp(rotation, q1, q2, interPointT);
+		}
+
+		// debugger;
+
+		return {position, rotation};
+	}
 	// endregion
 
 	// region private methods
@@ -134,7 +210,7 @@ export class BezierCurve {
 	}
 
 	_setSpanCurveControl(index: number) {
-		// console.log(' set control');
+
 		const startPointIndex: number = index;
 		const endPointIndex: number = startPointIndex === this.pathNodes.length - 1 ? 0 : startPointIndex + 1;
 
@@ -151,7 +227,7 @@ export class BezierCurve {
 		const nCentPos = Vec2.subtract(v2(), nPos2D, cPos2D);
 		const t = Vec2.cross(nCentPos, nDir) / Vec2.cross(cDir, nDir);
 		const controlPos2D = Vec2.add(v2(), cPos2D, Vec2.multiplyScalar(v2(), cDir, t));
-		// debugger;
+
 		this._controlPoints[index] = v3(controlPos2D.x, (cPos.y + nPos.y) * .5, controlPos2D.y);
 	}
 
@@ -191,7 +267,7 @@ export class BezierCurve {
 
 		const startPointIndex: number = index;
 		const endPointIndex: number = startPointIndex === this.pathNodes.length - 1 ? 0 : startPointIndex + 1;
-
+		// debugger
 		const p0 = this.pathNodes[startPointIndex].worldPosition;
 		const p1 = this.pathNodes[endPointIndex].worldPosition;
 

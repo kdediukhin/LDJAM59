@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "Starship",
+    "_name": "PathMark",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Starship",
+    "_name": "PathMark",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -23,13 +23,9 @@
       }
     ],
     "_active": true,
-    "_components": [
-      {
-        "__id__": 7
-      }
-    ],
+    "_components": [],
     "_prefab": {
-      "__id__": 9
+      "__id__": 7
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -46,9 +42,9 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
+      "x": 0.2,
       "y": 1,
-      "z": 1
+      "z": 0.2
     },
     "_mobility": 0,
     "_layer": 1073741824,
@@ -62,7 +58,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Cone",
+    "_name": "Cube",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -86,22 +82,22 @@
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": 0.7071067811865475,
+      "x": 0,
       "y": 0,
       "z": 0,
-      "w": 0.7071067811865476
+      "w": 1
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.5,
+      "y": 0.5,
       "z": 1
     },
     "_mobility": 0,
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": 90,
+      "x": 0,
       "y": 0,
       "z": 0
     },
@@ -109,7 +105,7 @@
   },
   {
     "__type__": "cc.MeshRenderer",
-    "_name": "Cone<ModelComponent>",
+    "_name": "Cube<ModelComponent>",
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
@@ -130,7 +126,7 @@
       "__id__": 5
     },
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@38fd2",
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@a804a",
       "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
@@ -146,7 +142,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "799UxJiExC5IGmAyxCOesI"
+    "fileId": "e1rgbEZs9K+pFfkMnmZ7C2"
   },
   {
     "__type__": "cc.ModelBakeSettings",
@@ -176,29 +172,10 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "f3iGWKWqBIVr9zJ3pYSwLU",
+    "fileId": "29sxFyUVlMbp7SqcMbLuku",
     "instance": null,
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
-  },
-  {
-    "__type__": "1083dxBbelE7JR/ZIAg/Y/g",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 8
-    },
-    "speed": 2,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "88tO/1V5xDj7xDDDA7W7dk"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -208,7 +185,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "01pqD9KFxNL4ILfMM/LaMx",
+    "fileId": "2eU9e8tfFGRL5AJfqPCV0V",
     "instance": null,
     "targetOverrides": null
   }

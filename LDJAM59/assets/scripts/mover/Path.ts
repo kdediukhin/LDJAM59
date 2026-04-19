@@ -105,21 +105,22 @@ export class Path extends Component {
 	}
 
 	getFullPathLength(): number {
-		let pathLength: number = 0;
+		// let pathLength: number = 0;
 
-		for (let i = 0; i < this._pathPoints.length; i++) {
-			const startPoint: Vec3 = this._pathPoints[i];
+		// for (let i = 0; i < this._pathPoints.length; i++) {
+		// 	const startPoint: Vec3 = this._pathPoints[i];
 			
-			if (this._pathPoints[i + 1]) {
-				const endPoint: Vec3 = this._pathPoints[i + 1];
+		// 	if (this._pathPoints[i + 1]) {
+		// 		const endPoint: Vec3 = this._pathPoints[i + 1];
 
-				pathLength += Vec3.distance(startPoint, endPoint);
-			} else {
-				continue;
-			}	
-		}
+		// 		pathLength += Vec3.distance(startPoint, endPoint);
+		// 	} else {
+		// 		continue;
+		// 	}	
+		// }
 
-		return pathLength;
+		// return pathLength;
+		return this._pathCurve.getFullPathLength();
 	}
 
 	getPathPoints(): Vec3[] {
@@ -185,6 +186,10 @@ export class Path extends Component {
 			// 	this.pathMovables = [];
 			// }
 		}
+	}
+
+	getCurve(): BezierCurve {
+		return this._pathCurve;
 	}
 
 	// region private methods

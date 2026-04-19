@@ -14,6 +14,7 @@ export enum GameEvent {
 	CAMERA_FOCUS = 25,
 
 	PATH_UPDATE_POINTS = 30,
+<<<<<<< HEAD
 
 	INPUT_START = 100,
 
@@ -23,6 +24,9 @@ export enum GameEvent {
 	RAY_HIT_SUCCESS = 203,
 
 	
+=======
+	ALLSCREEN_INPUT = 31	
+>>>>>>> main
 }
 
 Enum(GameEvent);
