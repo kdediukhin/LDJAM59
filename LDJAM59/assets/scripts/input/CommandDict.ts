@@ -4,15 +4,19 @@ import { GameEvent } from '../enums/GameEvent'
 import { ScreenButton } from './ScreenButton';
 
 export const CommandDict = {
-	
-	
+
+
 	allscreenUpCommand(button: ScreenButton) {
 
 		gameEventTarget.emit(GameEvent.ALLSCREEN_INPUT, button.touchCurrPos);
 	},
-	
+
 	moveEquipmentCommand(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.MOVE_PLACER, button.touchCurrPos);
+		gameEventTarget.emit(GameEvent.MOVE_PLACER, button.touchCurrPos, button.touchUiPos);
+	},
+
+	rotateEquipmentCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.ROTATE_PLACER, button.touchCurrPos, button.touchUiPos);
 	},
 
 	pressPurchaseReflectorButtton(button: ScreenButton) {
@@ -34,5 +38,26 @@ export const CommandDict = {
 	denyPressCommand(button: ScreenButton) {
 		gameEventTarget.emit(GameEvent.PURCHASE_DENY, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, false);
+	},
+
+	toggleRotationOn() {
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true)
+		console.log('+');
+		
+	},
+
+	toggleRotationOff() {
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, false)
+	},
+
+	toggleMovementOn() {
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true);
+		console.log('++');
+		
+	},
+
+	toggleMovementOff() {
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, false)
 	}
+
 }

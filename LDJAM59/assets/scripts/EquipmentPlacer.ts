@@ -20,6 +20,11 @@ export class EquipmentPlacer extends Component {
     private _currentYPosition: number = 0;
     private _isPlaceAvailable: boolean = true;
 
+    private _isRotationMode: boolean = false;
+    private _isMovementMode: boolean = false;
+    private _movementOffset: Vec2 = null;
+    private _rotationOffset: Vec2 = null;
+
     onEnable() {
 
         geometry.Plane.fromNormalAndPoint(this._groundPlane, new Vec3(0, 1, 0), Vec3.ZERO);
@@ -38,11 +43,29 @@ export class EquipmentPlacer extends Component {
 
         gameEventTarget[func](GameEvent.TOGGLE_PLACER, this.onTogglePlacer, this);
         gameEventTarget[func](GameEvent.MOVE_PLACER, this.onMovePlacer, this);
+        gameEventTarget[func](GameEvent.ROTATE_PLACER, this.onRotatePlacer, this);
+
+
+        gameEventTarget[func](GameEvent.TOGGLE_ROTATION, this.onToggleRotation, this)
+        gameEventTarget[func](GameEvent.TOGGLE_MOVEMENT, this.onToggleMovement, this)
 
         gameEventTarget[func](GameEvent.PURCHASE_ACCEPT, this.onPurchaseAccept, this);
-
         gameEventTarget[func](GameEvent.PURCHASE_DENY, this.onPurchaseDeny, this);
 
+    }
+
+    private onToggleMovement(isOn: boolean) {
+        this._isMovementMode = isOn;
+        this._isRotationMode = !isOn;
+        this._movementOffset = null;
+        this._rotationOffset = null;
+    }
+
+    private onToggleRotation(isOn: boolean) {
+        this._isRotationMode = isOn;
+        this._isMovementMode = !isOn;
+        this._rotationOffset = null;
+        this._movementOffset = null;
     }
 
     private onPurchaseDeny() {
@@ -50,8 +73,6 @@ export class EquipmentPlacer extends Component {
         this._isActivePlacer = false;
         this.node.removeFromParent();
         this.node.destroy();
-
-
     }
 
 
@@ -77,15 +98,36 @@ export class EquipmentPlacer extends Component {
         const hitX = ray.o.x + ray.d.x * t;
         const hitZ = ray.o.z + ray.d.z * t;
 
-        this.node.setPosition(hitX, this._currentYPosition + 5, hitZ);
-
-        gameEventTarget.emit(GameEvent.CHECK_PLACE_AVAILABILITY, this.node, this.radius, (isOn) => this._isPlaceAvailable = isOn);
-
-        gameEventTarget.emit(GameEvent.TOGGLE_CHECK_MARK, this._isPlaceAvailable);
-        if (this._outlineMaterial) {
-            this._outlineMaterial.setProperty('color', this._isPlaceAvailable ? this._availableOultineColor : this._disableOultineColor);
+        if (!this._movementOffset) {
+            this._movementOffset = new Vec2(hitX - this.node.position.x, hitZ - this.node.position.z);
         }
 
+        if (this._isMovementMode) {
+            this.node.setPosition(hitX - this._movementOffset.x, this._currentYPosition + 5, hitZ - this._movementOffset.y);
+
+            gameEventTarget.emit(GameEvent.CHECK_PLACE_AVAILABILITY, this.node, this.radius, (isOn) => this._isPlaceAvailable = isOn);
+
+            gameEventTarget.emit(GameEvent.TOGGLE_CHECK_MARK, this._isPlaceAvailable);
+            if (this._outlineMaterial) {
+                this._outlineMaterial.setProperty('color', this._isPlaceAvailable ? this._availableOultineColor : this._disableOultineColor);
+            }
+        }
+    }
+
+    private onRotatePlacer(currentPos: Vec2) {
+        if (!this._isActivePlacer) return;
+        if (!this._isRotationMode) return;
+
+        if (!this._rotationOffset) {
+            this._rotationOffset = new Vec2(currentPos.x, currentPos.y);
+        }
+
+        const deltaX = currentPos.x - this._rotationOffset.x;
+        const deltaY = currentPos.y - this._rotationOffset.y;
+        const delta = deltaX - deltaY;
+        const rotationY = this.node.eulerAngles.y - delta * 0.1;
+        this.node.setRotationFromEuler(0, rotationY, 0);
+        this._rotationOffset.set(currentPos.x, currentPos.y);
     }
 
 
