@@ -61,6 +61,7 @@ export class SignalRay extends Component {
     private _castRay(): void {
         const points: Vec3[] = [];
         const reflectorIndices: Set<number> = new Set();
+        const passedAmplifiers: Set<Node> = new Set();
 
         let origin = this.node.worldPosition.clone();
         let dir = new Vec3();
@@ -92,21 +93,14 @@ export class SignalRay extends Component {
 
             const amplifier = result.collider.node.getComponent(Amplifier);
             if (amplifier) {
-                gameEventTarget.emit(GameEvent.UPDATE_MAX_DISTANCE, amplifier.node, amplifier.amplifyPower);
-                remainingDistance += amplifier.amplifyPower;
-                // Кастуем сквозь усилитель, исключая его layer, чтобы найти выход из него
-                const maskWithoutAmplifier = 0xffffffff & ~amplifier.node.layer;
-                Vec3.scaleAndAdd(origin, hitPoint, dir, 0.01);
-                this._ray.o.set(origin);
-                this._ray.d.set(dir);
-                const exitHit = PhysicsSystem.instance.raycastClosest(this._ray, maskWithoutAmplifier, remainingDistance);
-                if (exitHit) {
-                    const exitResult = PhysicsSystem.instance.raycastClosestResult;
-                    remainingDistance -= exitResult.distance;
-                    Vec3.scaleAndAdd(origin, exitResult.hitPoint, dir, 0.01);
-                } else {
-                    this._amplifierMap.delete(amplifier.node);
+                if (!passedAmplifiers.has(amplifier.node)) {
+                    // Входим в усилитель: добавляем усиление и запоминаем его
+                    gameEventTarget.emit(GameEvent.UPDATE_MAX_DISTANCE, amplifier.node, amplifier.amplifyPower);
+                    remainingDistance += amplifier.amplifyPower;
+                    passedAmplifiers.add(amplifier.node);
                 }
+                // Пропускаем луч сквозь усилитель (вход или выход)
+                Vec3.scaleAndAdd(origin, hitPoint, dir, 0.01);
                 continue;
             }
 
