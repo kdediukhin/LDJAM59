@@ -46,8 +46,6 @@ export class StarshipManager extends Component {
 	// region life-cycle callbacks
 	onEnable() {
 
-		this.scheduleOnce(() => { this.launchStarship() }, .1);
-
 		this._subscribeEvents(true);
 	}
 
@@ -61,7 +59,7 @@ export class StarshipManager extends Component {
 	// endregion
 
 	// region public methods
-	launchStarship() {
+	launchStarship(colorHex: Colors) {
 		const path = this.pathManager.getAvaliablePath();
 		const starship = instantiate(this.starshipPrefab);
 		starship.setParent(this.node);
@@ -69,12 +67,12 @@ export class StarshipManager extends Component {
 		this._setStarshipOnPath(starship, path);
 		this.pathManager.changePathOccupationStatus(path, true);
 
-		const randColorHex = Object.values(Colors)[Math.floor(Math.random() * Object.keys(Colors).length)];
-		this._colorHex = randColorHex;
+		
+		this._colorHex = colorHex;
 		const material = new Material();
 		material.copy(this.material);
 		const color = new Color();
-		Color.fromHEX(color, randColorHex);
+		Color.fromHEX(color, colorHex);
 		material.setProperty('mainColor', color);
 		this._setStarshipColor(material, starship, path);
 
@@ -95,6 +93,7 @@ export class StarshipManager extends Component {
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
 		gameEventTarget[func](GameEvent.PAUSE_STARSHIPS, this.onPauseStarships, this);
 		gameEventTarget[func](GameEvent.RESUME_STARSHIPS, this.onResumeStarships, this);
+		gameEventTarget[func](GameEvent.LAUNCH_STARSHIP, this.onLaunchStarship, this);
 	}
 
 	_setStarshipOnPath(starship: Node, path: Path) {
@@ -136,11 +135,7 @@ export class StarshipManager extends Component {
 			if (receiver.node === receiverNode) {
 				const indexToRemove = this._starships.indexOf(starship);
 				if (indexToRemove > -1) {
-					this._removeStarship(indexToRemove);
-					
-					this.scheduleOnce(() => {
-						this.launchStarship()
-					}, this.relaunchInterval);
+					this._removeStarship(indexToRemove);					
 				}
 			}
 		}
@@ -165,10 +160,6 @@ export class StarshipManager extends Component {
 
 		if (indexToRemove > -1) {
 			this._removeStarship(indexToRemove);
-
-			this.scheduleOnce(() => {
-				this.launchStarship()
-			}, this.relaunchInterval);
 		}
 
 	}
@@ -179,6 +170,10 @@ export class StarshipManager extends Component {
 
 	onResumeStarships() {
 		this._starships.forEach(starship => starship.getComponent(MoverToPoint) && starship.getComponent(MoverToPoint).resume());
+	}
+
+	onLaunchStarship(colorHex: Colors) {
+		this.launchStarship(colorHex);
 	}
 	// endregion
 }
