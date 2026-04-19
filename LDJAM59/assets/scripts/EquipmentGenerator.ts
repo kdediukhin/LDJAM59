@@ -45,7 +45,6 @@ export class EquipmentGenerator extends Component {
         gameEventTarget[func](GameEvent.TOGGLE_OVERLAY, this.onToggleOverlay, this);
         gameEventTarget[func](GameEvent.CHECK_PLACE_AVAILABILITY, this.onCheckPlaceAvailability, this);
         // gameEventTarget[func](GameEvent.PURCHASE_ACCEPT, () => this.onToggleOverlay(false), this);
-        gameEventTarget[func](GameEvent.PURCHASE_DENY, this.onPurchaseDeny, this);
     }
 
     private onCheckPlaceAvailability(node: Node, radius: number, callback: (isOn: boolean) => void) {
@@ -73,9 +72,6 @@ export class EquipmentGenerator extends Component {
 
     }
 
-    private onPurchaseDeny() {
-        
-    }
 }
 
 

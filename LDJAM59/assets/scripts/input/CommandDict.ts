@@ -7,16 +7,15 @@ export const CommandDict = {
 
 
 	allscreenUpCommand(button: ScreenButton) {
-
 		gameEventTarget.emit(GameEvent.ALLSCREEN_INPUT, button.touchCurrPos);
 	},
 
 	moveEquipmentCommand(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.MOVE_PLACER, button.touchCurrPos, button.touchUiPos);
+		gameEventTarget.emit(GameEvent.MOVE_PLACER, button.touchCurrPos, button.touchUiPos, button);
 	},
 
 	rotateEquipmentCommand(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.ROTATE_PLACER, button.touchCurrPos, button.touchUiPos);
+		gameEventTarget.emit(GameEvent.ROTATE_PLACER, button.touchCurrPos, button.touchUiPos, button);
 	},
 
 	pressPurchaseReflectorButtton(button: ScreenButton) {
@@ -40,20 +39,20 @@ export const CommandDict = {
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, false);
 	},
 
-	toggleRotationOn() {
-		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true)		
+	toggleRotationOn(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true, button);		
 	},
 
-	toggleRotationOff() {
-		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, false)
+	toggleRotationOff(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, false, button);
 	},
 
-	toggleMovementOn() {
-		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true);		
+	toggleMovementOn(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true, button);		
 	},
 
-	toggleMovementOff() {
-		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, false)
+	toggleMovementOff(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, false, button);
 	}
 
 }

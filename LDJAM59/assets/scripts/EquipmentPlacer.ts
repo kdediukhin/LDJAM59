@@ -1,6 +1,7 @@
 import { _decorator, Camera, CCFloat, Color, Component, director, game, geometry, Material, MeshRenderer, Node, Vec2, Vec3 } from 'cc';
 import { gameEventTarget } from './plugins/GameEventTarget';
 import { GameEvent } from './enums/GameEvent';
+import { ScreenButton } from './input/ScreenButton';
 const { ccclass, property } = _decorator;
 
 @ccclass('EquipmentPlacer')
@@ -24,12 +25,23 @@ export class EquipmentPlacer extends Component {
     private _isMovementMode: boolean = false;
     private _movementOffset: Vec2 = null;
     private _rotationOffset: Vec2 = null;
+    private _uiNode: Node = null;
 
     onEnable() {
 
         geometry.Plane.fromNormalAndPoint(this._groundPlane, new Vec3(0, 1, 0), Vec3.ZERO);
         this._outlineMaterial = (this.outline.getComponent(MeshRenderer) ?? this.outline.getComponentInChildren(MeshRenderer)).getMaterialInstance(0);
         this.outline.active = false;
+
+
+        gameEventTarget.emit(GameEvent.ATTACH_UI_TO_PLACER, (uiNode) => {
+            this._uiNode = uiNode;
+        }, this.node);
+        this.scheduleOnce(() => {
+            console.log(this._uiNode);
+        });
+
+
         this._subscribeEvents(true);
     }
 
@@ -41,7 +53,7 @@ export class EquipmentPlacer extends Component {
     private _subscribeEvents(isOn: boolean) {
         const func = isOn ? 'on' : 'off';
 
-        gameEventTarget[func](GameEvent.TOGGLE_PLACER, this.onTogglePlacer, this);
+        // gameEventTarget[func](GameEvent.TOGGLE_PLACER, this.onTogglePlacer, this);
         gameEventTarget[func](GameEvent.MOVE_PLACER, this.onMovePlacer, this);
         gameEventTarget[func](GameEvent.ROTATE_PLACER, this.onRotatePlacer, this);
 
@@ -49,45 +61,58 @@ export class EquipmentPlacer extends Component {
         gameEventTarget[func](GameEvent.TOGGLE_ROTATION, this.onToggleRotation, this)
         gameEventTarget[func](GameEvent.TOGGLE_MOVEMENT, this.onToggleMovement, this)
 
-        gameEventTarget[func](GameEvent.PURCHASE_ACCEPT, this.onPurchaseAccept, this);
-        gameEventTarget[func](GameEvent.PURCHASE_DENY, this.onPurchaseDeny, this);
+        // gameEventTarget[func](GameEvent.PURCHASE_ACCEPT, this.onPurchaseAccept, this);
+        // gameEventTarget[func](GameEvent.PURCHASE_DENY, this.onPurchaseDeny, this);
 
     }
 
-    private onToggleMovement(isOn: boolean) {
+    private onToggleMovement(isOn: boolean, button: ScreenButton) {
+        if (!button.node.isChildOf(this._uiNode)) return;
+
         this._isMovementMode = isOn;
         this._isRotationMode = !isOn;
         this._movementOffset = null;
         this._rotationOffset = null;
+
+        this._isActivePlacer = isOn;
+        this.outline.active = isOn;
+        // this._currentYPosition = this.node.position.y;
     }
 
-    private onToggleRotation(isOn: boolean) {
+    private onToggleRotation(isOn: boolean, button: ScreenButton) {
+        if (!button.node.isChildOf(this._uiNode)) return;
+
         this._isRotationMode = isOn;
         this._isMovementMode = !isOn;
         this._rotationOffset = null;
         this._movementOffset = null;
+
+         this._isActivePlacer = isOn;
+        this.outline.active = isOn;
     }
 
-    private onPurchaseDeny() {
+    // private onPurchaseDeny() {
+    //     if (!this._isActivePlacer) return;
+    //     this._isActivePlacer = false;
+    //     this.node.removeFromParent();
+    //     this.node.destroy();
+    // }
+
+
+    // private onPurchaseAccept() {
+    //     if (!this._isActivePlacer) return;
+    //     const { x, y, z } = this.node.position;
+    //     this.node.setPosition(x, this._currentYPosition, z);
+
+    //     this._isActivePlacer = false;
+    //     this.outline.active = false;
+
+    // }
+
+    private onMovePlacer(currentPos: Vec2, uiPos: Vec2, button: ScreenButton) {
+
         if (!this._isActivePlacer) return;
-        this._isActivePlacer = false;
-        this.node.removeFromParent();
-        this.node.destroy();
-    }
-
-
-    private onPurchaseAccept() {
-        if (!this._isActivePlacer) return;
-        const { x, y, z } = this.node.position;
-        this.node.setPosition(x, this._currentYPosition, z);
-
-        this._isActivePlacer = false;
-        this.outline.active = false;
-    }
-
-    private onMovePlacer(currentPos: Vec2) {
-
-        if (!this._isActivePlacer) return;
+        if (!button.node.isChildOf(this._uiNode)) return;
 
         let mainCamera: Camera = null;
         gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
@@ -96,11 +121,7 @@ export class EquipmentPlacer extends Component {
         const ray = new geometry.Ray();
         mainCamera.screenPointToRay(currentPos.x, currentPos.y, ray);
 
-        console.log('++++');
-
         const t = geometry.intersect.rayPlane(ray, this._groundPlane);
-        console.log('t', t);
-
         if (t <= 0) return;
 
         const hitX = ray.o.x + ray.d.x * t;
@@ -111,9 +132,7 @@ export class EquipmentPlacer extends Component {
         }
 
         if (this._isMovementMode) {
-            console.log('+++++++');
-
-            this.node.setPosition(hitX - this._movementOffset.x, this._currentYPosition + 5, hitZ - this._movementOffset.y);
+            this.node.setPosition(hitX - this._movementOffset.x, this._currentYPosition, hitZ - this._movementOffset.y);
 
             gameEventTarget.emit(GameEvent.CHECK_PLACE_AVAILABILITY, this.node, this.radius, (isOn) => this._isPlaceAvailable = isOn);
 
@@ -124,9 +143,10 @@ export class EquipmentPlacer extends Component {
         }
     }
 
-    private onRotatePlacer(currentPos: Vec2) {
+    private onRotatePlacer(currentPos: Vec2, uiPos: Vec2, button: ScreenButton) {
         if (!this._isActivePlacer) return;
         if (!this._isRotationMode) return;
+        if (!button.node.isChildOf(this._uiNode)) return;
 
         if (!this._rotationOffset) {
             this._rotationOffset = new Vec2(currentPos.x, currentPos.y);
@@ -141,13 +161,13 @@ export class EquipmentPlacer extends Component {
     }
 
 
-    private onTogglePlacer(node: Node) {
-        if (node !== this.node) return;
-        this._isActivePlacer = true;
-        this.outline.active = true;
+    // private onTogglePlacer(node: Node) {
+    //     if (node !== this.node) return;
+    //     this._isActivePlacer = true;
+    //     this.outline.active = true;
 
-        this._currentYPosition = this.node.position.y;
-    }
+    //     this._currentYPosition = this.node.position.y;
+    // }
 }
 
 
