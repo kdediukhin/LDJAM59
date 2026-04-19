@@ -106,14 +106,11 @@ export class SignalRay extends Component {
 
             const receiver = result.collider.node.getComponent(Receiver);
             if (receiver) {
-                console.log(`[SignalRay] RAY_HIT_RECEIVED: ${receiver.node.name}`);
                 gameEventTarget.emit(GameEvent.RAY_HIT_RECEIVED, receiver.node);
 
                 if (receiver.colorHex === this.colorHex) {
-                    console.log(`[SignalRay] RAY_HIT_SUCCESS: ${receiver.node.name} (color match)`);
                     gameEventTarget.emit(GameEvent.RAY_HIT_SUCCESS, receiver.node);
                 } else {
-                    console.log(`[SignalRay] color mismatch: receiver=${receiver.colorHex}, ray=${this.colorHex}`);
                 }
                 break;
             }

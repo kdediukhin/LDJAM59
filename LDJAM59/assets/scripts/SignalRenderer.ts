@@ -20,10 +20,10 @@ export class SignalRenderer extends Component {
 
 
 
-        const tex = this._lineMaterial.getProperty('mainTexture') as Texture2D;
-        if (tex) {
-            tex.setWrapMode(Texture2D.WrapMode.REPEAT, Texture2D.WrapMode.REPEAT);
-        }
+        // const tex = this._lineMaterial.getProperty('mainTexture') as Texture2D;
+        // if (tex) {
+        //     tex.setWrapMode(Texture2D.WrapMode.REPEAT, Texture2D.WrapMode.REPEAT);
+        // }
     }
 
     public setLineColor(colorHex: string) {

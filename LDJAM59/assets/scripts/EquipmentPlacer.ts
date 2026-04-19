@@ -86,13 +86,21 @@ export class EquipmentPlacer extends Component {
     }
 
     private onMovePlacer(currentPos: Vec2) {
+
         if (!this._isActivePlacer) return;
-        const mainCamera = director.getScene().getComponentInChildren(Camera);
+
+        let mainCamera: Camera = null;
+        gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
+
 
         const ray = new geometry.Ray();
         mainCamera.screenPointToRay(currentPos.x, currentPos.y, ray);
 
+        console.log('++++');
+
         const t = geometry.intersect.rayPlane(ray, this._groundPlane);
+        console.log('t', t);
+
         if (t <= 0) return;
 
         const hitX = ray.o.x + ray.d.x * t;
@@ -103,6 +111,8 @@ export class EquipmentPlacer extends Component {
         }
 
         if (this._isMovementMode) {
+            console.log('+++++++');
+
             this.node.setPosition(hitX - this._movementOffset.x, this._currentYPosition + 5, hitZ - this._movementOffset.y);
 
             gameEventTarget.emit(GameEvent.CHECK_PLACE_AVAILABILITY, this.node, this.radius, (isOn) => this._isPlaceAvailable = isOn);

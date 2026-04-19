@@ -15,8 +15,8 @@ const { ccclass, property } = _decorator;
 @ccclass('StarshipManager')
 export class StarshipManager extends Component {
 	// region editors' fields and properties
-	@property(Prefab)
-	starshipPrefab: Prefab;
+	@property([Prefab])
+	starshipPrefab: Prefab[] = [];
 
 	@property(PathManager)
 	pathManager: PathManager;
@@ -61,13 +61,13 @@ export class StarshipManager extends Component {
 	// region public methods
 	launchStarship(colorHex: Colors) {
 		const path = this.pathManager.getAvaliablePath();
-		const starship = instantiate(this.starshipPrefab);
+		const starship = instantiate(this.starshipPrefab[Math.floor(Math.random() * this.starshipPrefab.length)]);
 		starship.setParent(this.node);
 
 		this._setStarshipOnPath(starship, path);
 		this.pathManager.changePathOccupationStatus(path, true);
 
-		
+
 		this._colorHex = colorHex;
 		const material = new Material();
 		material.copy(this.material);
@@ -79,7 +79,7 @@ export class StarshipManager extends Component {
 		this._starships.push(starship);
 		const receiver = starship.getComponent(Receiver) ?? starship.getComponentInChildren(Receiver);
 		receiver.setColorHex(this._colorHex);
-		
+
 		this._shipReceivers.set(starship, receiver);
 	}
 
@@ -135,11 +135,11 @@ export class StarshipManager extends Component {
 	// region event handlers
 
 	onRayHitSuccess(receiverNode: Node) {
-		for (const [starship, receiver] of this._shipReceivers.entries()) {			
+		for (const [starship, receiver] of this._shipReceivers.entries()) {
 			if (receiver.node === receiverNode) {
 				const indexToRemove = this._starships.indexOf(starship);
 				if (indexToRemove > -1) {
-					this._removeStarship(indexToRemove);					
+					this._removeStarship(indexToRemove);
 				}
 			}
 		}

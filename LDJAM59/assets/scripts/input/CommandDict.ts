@@ -41,9 +41,7 @@ export const CommandDict = {
 	},
 
 	toggleRotationOn() {
-		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true)
-		console.log('+');
-		
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true)		
 	},
 
 	toggleRotationOff() {
@@ -51,9 +49,7 @@ export const CommandDict = {
 	},
 
 	toggleMovementOn() {
-		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true);
-		console.log('++');
-		
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true);		
 	},
 
 	toggleMovementOff() {
