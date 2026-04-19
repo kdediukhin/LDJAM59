@@ -82,6 +82,10 @@ export class StarshipManager extends Component {
 		
 		this._shipReceivers.set(starship, receiver);
 	}
+
+	getStarships() {
+		return this._starships;
+	}
 	// endregion
 
 	// region private methods
