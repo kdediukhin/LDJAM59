@@ -23,14 +23,30 @@
       ],
       "subMetas": {}
     },
-    "fc37a": {
+    "7db2b": {
       "importer": "gltf-material",
-      "uuid": "72b49df9-3e7d-470a-9932-71e030260239@fc37a",
+      "uuid": "72b49df9-3e7d-470a-9932-71e030260239@7db2b",
       "displayName": "",
-      "id": "fc37a",
-      "name": "SpaceShip03.material",
+      "id": "7db2b",
+      "name": "SpaceShip03_1.material",
       "userData": {
         "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "9a1bf": {
+      "importer": "gltf-material",
+      "uuid": "72b49df9-3e7d-470a-9932-71e030260239@9a1bf",
+      "displayName": "",
+      "id": "9a1bf",
+      "name": "SpaceShip03_2.material",
+      "userData": {
+        "gltfIndex": 1
       },
       "ver": "1.0.14",
       "imported": true,
@@ -86,7 +102,8 @@
       "skeletons": [],
       "textures": [],
       "materials": [
-        "72b49df9-3e7d-470a-9932-71e030260239@fc37a"
+        "72b49df9-3e7d-470a-9932-71e030260239@7db2b",
+        "72b49df9-3e7d-470a-9932-71e030260239@9a1bf"
       ],
       "scenes": [
         "72b49df9-3e7d-470a-9932-71e030260239@72d67"
