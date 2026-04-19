@@ -46,11 +46,11 @@ export class SignalRay extends Component {
     private _subscribeEvents(isOn: boolean) {
         const func = isOn ? 'on' : 'off';
 
-        gameEventTarget[func](GameEvent.UPDATE_REFLECTION, this._castRay, this);
+        // gameEventTarget[func](GameEvent.UPDATE_REFLECTION, this._castRay, this);
         gameEventTarget[func](GameEvent.UPDATE_MAX_DISTANCE, this._onUpdateMaxDistance, this);
     }
 
-    start(): void {
+    update(): void {
         this._castRay();
     }
 

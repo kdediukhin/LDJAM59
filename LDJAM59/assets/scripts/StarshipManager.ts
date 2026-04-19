@@ -1,10 +1,12 @@
-import { _decorator, Camera, Component, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Vec2 } from 'cc';
+import { _decorator, Camera, Color, Component, Enum, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Vec2 } from 'cc';
 import { PathManager } from './PathManager';
 import { MoverToPoint } from './mover/MoverToPoint';
 import { Path } from './mover/Path';
 import { gameEventTarget } from './plugins/GameEventTarget';
 import { GameEvent } from './enums/GameEvent';
 import { PathRenderer } from './PathRenderer';
+import { Colors } from './enums/Colors';
+import { Receiver } from './Receiver';
 const { ccclass, property } = _decorator;
 
 // region classes-helpers
@@ -22,8 +24,11 @@ export class StarshipManager extends Component {
 	@property
 	relaunchInterval: number = 3;
 
-	@property([Material])
-	colorMaterials: Material[] = [];
+	@property(Material)
+	material: Material = null;
+
+	// @property({ type: Enum(Colors) })
+	// color: Colors;
 
 	@property(Camera)
 	mainCamera: Camera;
@@ -34,12 +39,14 @@ export class StarshipManager extends Component {
 
 	// region private fields and properties
 	_starships: Node[] = [];
+	private _colorHex: string
+	private _shipReceivers: Map<Node, Receiver> = new Map();
 	// endregion
 
 	// region life-cycle callbacks
 	onEnable() {
-		
-		this.scheduleOnce(() => {this.launchStarship()}, .1);
+
+		this.scheduleOnce(() => { this.launchStarship() }, .1);
 
 		this._subscribeEvents(true);
 	}
@@ -49,7 +56,7 @@ export class StarshipManager extends Component {
 	}
 
 	update(deltaTime: number) {
-		
+
 	}
 	// endregion
 
@@ -57,23 +64,36 @@ export class StarshipManager extends Component {
 	launchStarship() {
 		const path = this.pathManager.getAvaliablePath();
 		const starship = instantiate(this.starshipPrefab);
-		starship.setParent(this.node);		
-		
+		starship.setParent(this.node);
+
 		this._setStarshipOnPath(starship, path);
 		this.pathManager.changePathOccupationStatus(path, true);
 
-		const material = this.colorMaterials[Math.floor(Math.random() * this.colorMaterials.length)];
+		const randColorHex = Object.values(Colors)[Math.floor(Math.random() * Object.keys(Colors).length)];
+		this._colorHex = randColorHex;
+		const material = new Material();
+		material.copy(this.material);
+		const color = new Color();
+		Color.fromHEX(color, randColorHex);
+		material.setProperty('mainColor', color);
 		this._setStarshipColor(material, starship, path);
 
 		this._starships.push(starship);
-	}	
+		const receiver = starship.getComponent(Receiver) ?? starship.getComponentInChildren(Receiver);
+		receiver.setColorHex(this._colorHex);
+		console.log(receiver);
+		
+		this._shipReceivers.set(starship, receiver);
+	}
 	// endregion
 
 	// region private methods
 	_subscribeEvents(isOn: boolean) {
-		const func = isOn? 'on': 'off';
+		const func = isOn ? 'on' : 'off';
 
-		gameEventTarget[func](GameEvent.ALLSCREEN_INPUT, this.onAllscreenInput, this);
+		// gameEventTarget[func](GameEvent.ALLSCREEN_INPUT, this.onAllscreenInput, this);
+		// gameEventTarget[func](GameEvent.RAY_HIT_RECEIVED, this.onRayHitReceived, this);
+		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
 	}
 
 	_setStarshipOnPath(starship: Node, path: Path) {
@@ -87,10 +107,12 @@ export class StarshipManager extends Component {
 				this._setStarshipOnPath(starship, path);
 			}, this.relaunchInterval);
 		});
+
+
 	}
 
 	_setStarshipColor(material: Material, starship: Node, path: Path) {
-		
+
 		starship.getComponentsInChildren(MeshRenderer).forEach(mesh => mesh.setMaterialInstance(material, 0));
 		path.getComponent(PathRenderer).setMaterial(material);
 
@@ -107,6 +129,22 @@ export class StarshipManager extends Component {
 	// endregion
 
 	// region event handlers
+
+	onRayHitSuccess(receiverNode: Node) {
+		for (const [starship, receiver] of this._shipReceivers.entries()) {			
+			if (receiver.node === receiverNode) {
+				const indexToRemove = this._starships.indexOf(starship);
+				if (indexToRemove > -1) {
+					this._removeStarship(indexToRemove);
+					
+					this.scheduleOnce(() => {
+						this.launchStarship()
+					}, this.relaunchInterval);
+				}
+			}
+		}
+	}
+
 	onAllscreenInput(touchLoc: Vec2) {
 		const ray = new geometry.Ray();
 		this.mainCamera.screenPointToRay(touchLoc.x, touchLoc.y, ray);
@@ -131,7 +169,7 @@ export class StarshipManager extends Component {
 				this.launchStarship()
 			}, this.relaunchInterval);
 		}
-		
+
 	}
 	// endregion
 }

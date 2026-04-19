@@ -3349,24 +3349,10 @@
       "__id__": 159
     },
     "relaunchInterval": 3,
-    "colorMaterials": [
-      {
-        "__uuid__": "9d3c3969-51da-4bd2-9017-470cf9ef14a4",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "99dc2381-be49-4a52-a95d-c6a97fa83763",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "b3812044-0205-42f5-ace3-558ec38b0864",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "8d0809e4-6f26-46e4-9ac8-0d0f3bdcfe82",
-        "__expectedType__": "cc.Material"
-      }
-    ],
+    "material": {
+      "__uuid__": "d7fd6ce3-519d-4402-9d09-c670acd17821",
+      "__expectedType__": "cc.Material"
+    },
     "mainCamera": {
       "__id__": 6
     },

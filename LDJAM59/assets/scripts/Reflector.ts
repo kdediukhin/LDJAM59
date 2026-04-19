@@ -13,9 +13,9 @@ export class Reflector extends Component {
         this.mainCamera = director.getScene().getComponentInChildren(Camera);
         this._subscribeEvents(true);
 
-        this.scheduleOnce(() => {
-            gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
-        });
+        // this.scheduleOnce(() => {
+        //     gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
+        // });
     }
 
     protected onDisable(): void {
@@ -26,14 +26,14 @@ export class Reflector extends Component {
         const func = isOn ? 'on' : 'off';
 
         gameEventTarget[func](GameEvent.ALLSCREEN_INPUT, this._onTouchStart, this);
-        gameEventTarget[func](GameEvent.TOGGLE_OVERLAY, this.onToggleOverlay, this);
+        // gameEventTarget[func](GameEvent.TOGGLE_OVERLAY, this.onToggleOverlay, this);
     }
 
-    private onToggleOverlay() {
-        this.scheduleOnce(() => {            
-            gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
-        });
-    }
+    // private onToggleOverlay() {
+    //     this.scheduleOnce(() => {            
+    //         gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
+    //     });
+    // }
 
     private _onTouchStart(buttonCurrPos: Vec2): void {
         if (!this.mainCamera) return;
@@ -58,9 +58,9 @@ export class Reflector extends Component {
         if (this.node.eulerAngles.y >= 360) {
             this.node.eulerAngles = this.node.eulerAngles.subtract3f(0, 360, 0);
         }
-        this.scheduleOnce(() => {
-            gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
-        });
+        // this.scheduleOnce(() => {
+        //     gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
+        // });
 
     }
 
