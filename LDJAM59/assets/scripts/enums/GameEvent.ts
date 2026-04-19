@@ -24,7 +24,7 @@ export enum GameEvent {
 	UPDATE_MAX_DISTANCE = 201,
 	RAY_HIT_RECEIVED = 202,
 	RAY_HIT_SUCCESS = 203,
-
+	RAY_HIT_FAIL = 204,
 
 
 	BUY_ITEM = 300,

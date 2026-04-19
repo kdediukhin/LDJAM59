@@ -114,6 +114,7 @@ export class SignalRay extends Component {
                     gameEventTarget.emit(GameEvent.RAY_HIT_SUCCESS, receiver.node);
                 } else {
                     console.log(`[SignalRay] color mismatch: receiver=${receiver.colorHex}, ray=${this.colorHex}`);
+                    gameEventTarget.emit(GameEvent.RAY_HIT_FAIL, receiver.node);
                 }
                 break;
             }
