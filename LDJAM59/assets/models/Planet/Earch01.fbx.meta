@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "9f2643e4-95f7-4542-a5cc-9d212c1a68db",
+  "files": [],
+  "subMetas": {
+    "64531": {
+      "importer": "gltf-scene",
+      "uuid": "9f2643e4-95f7-4542-a5cc-9d212c1a68db@64531",
+      "displayName": "",
+      "id": "64531",
+      "name": "Earch01.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "530fe": {
+      "importer": "gltf-mesh",
+      "uuid": "9f2643e4-95f7-4542-a5cc-9d212c1a68db@530fe",
+      "displayName": "",
+      "id": "530fe",
+      "name": "Earch01.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 832
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1e9bf": {
+      "importer": "gltf-material",
+      "uuid": "9f2643e4-95f7-4542-a5cc-9d212c1a68db@1e9bf",
+      "displayName": "",
+      "id": "1e9bf",
+      "name": "Earch01.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "9f2643e4-95f7-4542-a5cc-9d212c1a68db@530fe"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9f2643e4-95f7-4542-a5cc-9d212c1a68db@1e9bf"
+      ],
+      "scenes": [
+        "9f2643e4-95f7-4542-a5cc-9d212c1a68db@64531"
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "e057a263-d012-4acd-a4ed-8b21a3ff9197",
+  "files": [],
+  "subMetas": {
+    "90a06": {
+      "importer": "gltf-mesh",
+      "uuid": "e057a263-d012-4acd-a4ed-8b21a3ff9197@90a06",
+      "displayName": "",
+      "id": "90a06",
+      "name": "SpaceShip01.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 3388
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "053e9": {
+      "importer": "gltf-material",
+      "uuid": "e057a263-d012-4acd-a4ed-8b21a3ff9197@053e9",
+      "displayName": "",
+      "id": "053e9",
+      "name": "SpaceShip01.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "41f59": {
+      "importer": "gltf-scene",
+      "uuid": "e057a263-d012-4acd-a4ed-8b21a3ff9197@41f59",
+      "displayName": "",
+      "id": "41f59",
+      "name": "SpaceShip01.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "e057a263-d012-4acd-a4ed-8b21a3ff9197@90a06"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "e057a263-d012-4acd-a4ed-8b21a3ff9197@053e9"
+      ],
+      "scenes": [
+        "e057a263-d012-4acd-a4ed-8b21a3ff9197@41f59"
+      ]
+    }
+  }
+}

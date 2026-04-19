@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "539638f7-ccac-4e4b-b144-488e79498011",
+  "files": [],
+  "subMetas": {
+    "72230": {
+      "importer": "gltf-material",
+      "uuid": "539638f7-ccac-4e4b-b144-488e79498011@72230",
+      "displayName": "",
+      "id": "72230",
+      "name": "Repeater01.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "91074": {
+      "importer": "gltf-mesh",
+      "uuid": "539638f7-ccac-4e4b-b144-488e79498011@91074",
+      "displayName": "",
+      "id": "91074",
+      "name": "Repeater01.001.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1486
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fc1df": {
+      "importer": "gltf-scene",
+      "uuid": "539638f7-ccac-4e4b-b144-488e79498011@fc1df",
+      "displayName": "",
+      "id": "fc1df",
+      "name": "Repeater01.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "539638f7-ccac-4e4b-b144-488e79498011@91074"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "539638f7-ccac-4e4b-b144-488e79498011@72230"
+      ],
+      "scenes": [
+        "539638f7-ccac-4e4b-b144-488e79498011@fc1df"
+      ]
+    }
+  }
+}

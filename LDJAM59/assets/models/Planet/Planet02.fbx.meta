@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "86ce823f-9665-4a19-a1d3-28b174b93603",
+  "files": [],
+  "subMetas": {
+    "d2f46": {
+      "importer": "gltf-mesh",
+      "uuid": "86ce823f-9665-4a19-a1d3-28b174b93603@d2f46",
+      "displayName": "",
+      "id": "d2f46",
+      "name": "Planet02.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1620
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d92cf": {
+      "importer": "gltf-material",
+      "uuid": "86ce823f-9665-4a19-a1d3-28b174b93603@d92cf",
+      "displayName": "",
+      "id": "d92cf",
+      "name": "Planet02.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ed767": {
+      "importer": "gltf-scene",
+      "uuid": "86ce823f-9665-4a19-a1d3-28b174b93603@ed767",
+      "displayName": "",
+      "id": "ed767",
+      "name": "Planet02.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "86ce823f-9665-4a19-a1d3-28b174b93603@d2f46"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "86ce823f-9665-4a19-a1d3-28b174b93603@d92cf"
+      ],
+      "scenes": [
+        "86ce823f-9665-4a19-a1d3-28b174b93603@ed767"
+      ]
+    }
+  }
+}

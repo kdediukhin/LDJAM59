@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "72b49df9-3e7d-470a-9932-71e030260239",
+  "files": [],
+  "subMetas": {
+    "c244a": {
+      "importer": "gltf-mesh",
+      "uuid": "72b49df9-3e7d-470a-9932-71e030260239@c244a",
+      "displayName": "",
+      "id": "c244a",
+      "name": "Cylinder.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1542
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fc37a": {
+      "importer": "gltf-material",
+      "uuid": "72b49df9-3e7d-470a-9932-71e030260239@fc37a",
+      "displayName": "",
+      "id": "fc37a",
+      "name": "SpaceShip03.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "72d67": {
+      "importer": "gltf-scene",
+      "uuid": "72b49df9-3e7d-470a-9932-71e030260239@72d67",
+      "displayName": "",
+      "id": "72d67",
+      "name": "SpaceShip03.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "72b49df9-3e7d-470a-9932-71e030260239@c244a"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "72b49df9-3e7d-470a-9932-71e030260239@fc37a"
+      ],
+      "scenes": [
+        "72b49df9-3e7d-470a-9932-71e030260239@72d67"
+      ]
+    }
+  }
+}

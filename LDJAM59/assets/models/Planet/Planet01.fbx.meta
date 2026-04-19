@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "f37469bc-d4cf-429b-92a7-2510fc5aa4b7",
+  "files": [],
+  "subMetas": {
+    "f641c": {
+      "importer": "gltf-mesh",
+      "uuid": "f37469bc-d4cf-429b-92a7-2510fc5aa4b7@f641c",
+      "displayName": "",
+      "id": "f641c",
+      "name": "Planet01.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1048
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "4b806": {
+      "importer": "gltf-material",
+      "uuid": "f37469bc-d4cf-429b-92a7-2510fc5aa4b7@4b806",
+      "displayName": "",
+      "id": "4b806",
+      "name": "Planet01.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ef49e": {
+      "importer": "gltf-scene",
+      "uuid": "f37469bc-d4cf-429b-92a7-2510fc5aa4b7@ef49e",
+      "displayName": "",
+      "id": "ef49e",
+      "name": "Planet01.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "f37469bc-d4cf-429b-92a7-2510fc5aa4b7@f641c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "f37469bc-d4cf-429b-92a7-2510fc5aa4b7@4b806"
+      ],
+      "scenes": [
+        "f37469bc-d4cf-429b-92a7-2510fc5aa4b7@ef49e"
+      ]
+    }
+  }
+}

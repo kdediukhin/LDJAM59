@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "f383e1f2-d403-4473-9858-59e9b225b0c8",
+  "files": [],
+  "subMetas": {
+    "3226d": {
+      "importer": "gltf-mesh",
+      "uuid": "f383e1f2-d403-4473-9858-59e9b225b0c8@3226d",
+      "displayName": "",
+      "id": "3226d",
+      "name": "Planet03.001.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 960
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "607a7": {
+      "importer": "gltf-material",
+      "uuid": "f383e1f2-d403-4473-9858-59e9b225b0c8@607a7",
+      "displayName": "",
+      "id": "607a7",
+      "name": "Planet03.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "caa5d": {
+      "importer": "gltf-scene",
+      "uuid": "f383e1f2-d403-4473-9858-59e9b225b0c8@caa5d",
+      "displayName": "",
+      "id": "caa5d",
+      "name": "Planet03.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "f383e1f2-d403-4473-9858-59e9b225b0c8@3226d"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "f383e1f2-d403-4473-9858-59e9b225b0c8@607a7"
+      ],
+      "scenes": [
+        "f383e1f2-d403-4473-9858-59e9b225b0c8@caa5d"
+      ]
+    }
+  }
+}

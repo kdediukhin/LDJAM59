@@ -10,6 +10,7 @@ export class EquipmentPlacer extends Component {
 
     private _isActivePlacer: boolean = false;
     private _groundPlane: geometry.Plane = new geometry.Plane();
+    private _currentYPosition: number = 0;
 
     onEnable() {
         
@@ -45,12 +46,15 @@ export class EquipmentPlacer extends Component {
         const hitX = ray.o.x + ray.d.x * t;
         const hitZ = ray.o.z + ray.d.z * t;
 
-        const currentY = this.node.position.y;
-        this.node.setPosition(hitX, currentY, hitZ);
+        this.node.setPosition(hitX, this._currentYPosition + 5, hitZ);
     }
 
     private onToggleOverlay(isOn: boolean) {
         if (isOn) return;
+
+         const {x, y, z} = this.node.position;
+        this.node.setPosition(x, this._currentYPosition, z);
+
         this._isActivePlacer = false;
         this.outline.active = false;
     }
@@ -59,6 +63,8 @@ export class EquipmentPlacer extends Component {
         if (node !== this.node) return;
         this._isActivePlacer = true;
         this.outline.active = true;
+
+        this._currentYPosition = this.node.position.y;
     }
 }
 
