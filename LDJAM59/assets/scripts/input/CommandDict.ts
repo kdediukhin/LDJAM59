@@ -27,10 +27,12 @@ export const CommandDict = {
 
 
 	checkPressCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.PURCHASE_ACCEPT, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, false);
 	},
 
 	denyPressCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.PURCHASE_DENY, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, false);
 	}
 }
