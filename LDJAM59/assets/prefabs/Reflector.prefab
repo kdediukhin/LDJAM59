@@ -23,19 +23,25 @@
       },
       {
         "__id__": 7
+      },
+      {
+        "__id__": 26
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 26
+        "__id__": 28
       },
       {
-        "__id__": 28
+        "__id__": 30
+      },
+      {
+        "__id__": 32
       }
     ],
     "_prefab": {
-      "__id__": 30
+      "__id__": 34
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -444,6 +450,62 @@
     ]
   },
   {
+    "__type__": "cc.Node",
+    "_name": "Outline",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 27
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "9a41rb/+1Dlredu2xb5J54",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
     "__type__": "542640jIqpENaeEjsMyoy5f",
     "_name": "",
     "_objFlags": 0,
@@ -453,7 +515,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 27
+      "__id__": 29
     },
     "_id": ""
   },
@@ -471,7 +533,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 29
+      "__id__": 31
     },
     "_material": null,
     "_isTrigger": false,
@@ -492,6 +554,27 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "45ZmZJjBJFJodzjJfbF+0m"
+  },
+  {
+    "__type__": "8f699fOOhpLoY/s67DkZMiW",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 33
+    },
+    "outline": {
+      "__id__": 26
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "3bk2cwZOVBnoyh7Jznh1r1"
   },
   {
     "__type__": "cc.PrefabInfo",

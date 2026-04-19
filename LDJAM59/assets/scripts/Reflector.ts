@@ -12,6 +12,10 @@ export class Reflector extends Component {
     protected onEnable(): void {
         this.mainCamera = director.getScene().getComponentInChildren(Camera);
         this._subscribeEvents(true);
+
+        this.scheduleOnce(() => {
+            gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
+        });
     }
 
     protected onDisable(): void {
@@ -21,7 +25,14 @@ export class Reflector extends Component {
     private _subscribeEvents(isOn: boolean) {
         const func = isOn ? 'on' : 'off';
 
-        gameEventTarget[func](GameEvent.INPUT_START, this._onTouchStart, this);
+        gameEventTarget[func](GameEvent.ALLSCREEN_INPUT, this._onTouchStart, this);
+        gameEventTarget[func](GameEvent.TOGGLE_OVERLAY, this.onToggleOverlay, this);
+    }
+
+    private onToggleOverlay() {
+        this.scheduleOnce(() => {            
+            gameEventTarget.emit(GameEvent.UPDATE_REFLECTION);
+        });
     }
 
     private _onTouchStart(buttonCurrPos: Vec2): void {
@@ -33,6 +44,14 @@ export class Reflector extends Component {
         const hit = PhysicsSystem.instance.raycastClosest(ray, 0xffffffff, 1000);
 
         if (!hit) return;
+
+        const result = PhysicsSystem.instance.raycastClosestResult;
+        const hitNode = result.collider.node;
+        console.log('44');
+
+        if (hitNode !== this.node && !this.node.children.includes(hitNode)) return;
+        console.log('55');
+
 
         const currEulerAngles = this.node.eulerAngles.clone();
         this.node.eulerAngles = currEulerAngles.add3f(0, -10, 0);

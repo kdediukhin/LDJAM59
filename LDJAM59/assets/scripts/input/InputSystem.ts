@@ -31,7 +31,7 @@ export class InputSystem extends Component {
 			const interType = InteractionType[interaction];
 
 
-			if (button.statusMap.get(interType)) {
+			if (button && button.statusMap.get(interType)) {
 				button.statusMap.set(interType, false);
 				command(button);
 			}
