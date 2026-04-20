@@ -56,10 +56,14 @@ export class UiController extends Component {
         gameEventTarget[func](GameEvent.ATTACH_UI_TO_PLACER, this.attachUiToPlacer, this);
     }
 
-    private attachUiToPlacer(fn: Function, node: Node) {
+    private attachUiToPlacer(fn: Function, node: Node, uiPos: Vec3) {
         const attachBtn = instantiate(this.attachBtnPrefab);
         attachBtn.getComponentsInChildren(ScreenButton).forEach(btn => btn.buttonName += `${node.uuid}`);
         attachBtn.setParent(this.canvasNode);
+
+        const worldPos = new Vec3();
+        this.uiCamera.screenToWorld(uiPos, worldPos);
+        attachBtn.worldPosition = worldPos;
 
         this._attachBtnsMap.set(attachBtn, null);
 

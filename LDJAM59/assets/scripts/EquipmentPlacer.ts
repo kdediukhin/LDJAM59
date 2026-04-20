@@ -33,10 +33,16 @@ export class EquipmentPlacer extends Component {
         this._outlineMaterial = (this.outline.getComponent(MeshRenderer) ?? this.outline.getComponentInChildren(MeshRenderer)).getMaterialInstance(0);
         this.outline.active = false;
 
+        let mainCamera: Camera = null;
+        gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
+
+        const worldPos = this.node.getWorldPosition();
+        const uiPos = new Vec3();
+        mainCamera.worldToScreen(worldPos, uiPos);
 
         gameEventTarget.emit(GameEvent.ATTACH_UI_TO_PLACER, (uiNode) => {
             this._uiNode = uiNode;
-        }, this.node);
+        }, this.node, uiPos);
         this.scheduleOnce(() => {
             console.log(this._uiNode);
         });
@@ -87,7 +93,7 @@ export class EquipmentPlacer extends Component {
         this._rotationOffset = null;
         this._movementOffset = null;
 
-         this._isActivePlacer = isOn;
+        this._isActivePlacer = isOn;
         this.outline.active = isOn;
     }
 
@@ -113,6 +119,7 @@ export class EquipmentPlacer extends Component {
 
         if (!this._isActivePlacer) return;
         if (!button.node.isChildOf(this._uiNode)) return;
+        if (!currentPos) return;
 
         let mainCamera: Camera = null;
         gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
@@ -146,6 +153,8 @@ export class EquipmentPlacer extends Component {
     private onRotatePlacer(currentPos: Vec2, uiPos: Vec2, button: ScreenButton) {
         if (!this._isActivePlacer) return;
         if (!this._isRotationMode) return;
+        if (!currentPos) return;
+
         if (!button.node.isChildOf(this._uiNode)) return;
 
         if (!this._rotationOffset) {

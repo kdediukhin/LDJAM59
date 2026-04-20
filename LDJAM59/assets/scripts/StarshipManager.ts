@@ -1,4 +1,4 @@
-import { _decorator, Camera, Color, Component, easing, Enum, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Quat, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Camera, Color, Component, easing, Enum, geometry, instantiate, Material, MeshRenderer, Node, ParticleSystem, Prefab, Quat, tween, Vec2, Vec3 } from 'cc';
 import { PathManager } from './PathManager';
 import { MoverToPoint } from './mover/MoverToPoint';
 import { Path } from './mover/Path';
@@ -145,8 +145,9 @@ export class StarshipManager extends Component {
 	}
 
 	private _flyAwayStarship(starship: Node) {
-		const particle = instantiate(this.particlesAcceptPrefab);
-		particle.setParent(starship);
+		// const particle = instantiate(this.particlesAcceptPrefab);
+		// particle.getComponentInChildren(ParticleSystem).play();
+		// particle.setParent(starship);
 
 		// Снимаем корабль с текущего пути
 		const mover = starship.getComponent(MoverToPoint);
