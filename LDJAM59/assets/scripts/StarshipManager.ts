@@ -1,4 +1,4 @@
-import { _decorator, Camera, Color, Component, easing, Enum, geometry, instantiate, Material, MeshRenderer, Node, ParticleSystem, Prefab, Quat, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Camera, Color, Component, easing, Enum, geometry, instantiate, Material, MeshRenderer, Node, ParticleSystem, Prefab, Quat, SphereCollider, tween, Vec2, Vec3 } from 'cc';
 import { PathManager } from './PathManager';
 import { MoverToPoint } from './mover/MoverToPoint';
 import { Path } from './mover/Path';
@@ -148,6 +148,8 @@ export class StarshipManager extends Component {
 	}
 
 	private _flyAwayStarship(starship: Node) {
+		starship.getComponentInChildren(SphereCollider).destroy();
+
 		const particle = instantiate(this.particlesAcceptPrefab);
 		particle.setParent(starship);
 		particle.getComponent(ParticleSystem).play();
@@ -193,7 +195,11 @@ export class StarshipManager extends Component {
 	}
 
 	_sendAllStarships() {
-
+		this._starships.forEach(starship => {
+			gameEventTarget.emit(GameEvent.REMOVE_SIGNAL, starship.getComponentInChildren(Receiver).colorHex);
+			this._flyAwayStarship(starship);
+		});
+		this._cPathManager.removeAllPaths();
 	}
 	// endregion
 

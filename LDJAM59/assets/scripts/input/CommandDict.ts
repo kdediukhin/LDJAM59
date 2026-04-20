@@ -19,12 +19,12 @@ export const CommandDict = {
 	},
 
 	pressPurchaseReflectorButtton(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.ADD_REFLECTOR, true);
+		gameEventTarget.emit(GameEvent.TRY_ADD_REFLECTOR, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, true);
 	},
 
 	pressPurchaseAmplifierButtton(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.ADD_AMPLIFIER, true);
+		gameEventTarget.emit(GameEvent.TRY_ADD_AMPLIFIER, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, true);
 	},
 

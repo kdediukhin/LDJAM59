@@ -516,6 +516,7 @@
       "__id__": 31
     },
     "speed": 2,
+    "acceleration": 0,
     "_id": ""
   },
   {
