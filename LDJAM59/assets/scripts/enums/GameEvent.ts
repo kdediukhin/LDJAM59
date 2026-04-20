@@ -57,6 +57,8 @@ export enum GameEvent {
 	TOGGLE_MOVEMENT = 401,
 	DESTROY_ITEM = 402,
 
+	TOGGLE_SOUND = 500,
+
 }
 
 Enum(GameEvent);

@@ -1,0 +1,63 @@
+{
+	"project": "LDJAM59",
+	"build": "${project}_${channel}",
+	"path": "adapter/${project}_${channel}",
+	"buildPlatform": "web-mobile",
+	"encode": "base64",
+	"isZip": true,
+	"skipBuild": false,
+	"exportChannels": ["AppLovin"],
+	"injectOptions": {
+		"Liftoff": {
+			"project": "CustomProjectName",
+			"path": "custom/${project}",
+			"body": "<script>if(mraid.getState()==='loading'){mraid.addEventListener('ready',onSdkReady)}else{onSdkReady()}function viewableChangeHandler(viewable){if(viewable){cc.game.run()}else{cc.game.pause()}}function onSdkReady(){mraid.addEventListener('viewableChange',viewableChangeHandler);if(mraid.isViewable()){showMyAd()}}var url='https://play.google.com/store/apps/details?id=com.volka.taonga';var android='https://play.google.com/store/apps/details?id=com.volka.taonga';if(/android/i.test(navigator.userAgent)){url=android}function showMyAd(){cc.game.run()}function AdRedirectProcessing(){mraid.open(url)}</script>",
+			"sdkScript": "<script src=\"./mraid.js\"></script>"
+		},
+		"Vungle": {
+			"channel": "vungle",
+			"body": "<script type='text/javascript' charset='utf-8'>window.apiName='Vungle';function AdRedirectProcessing(){console.log('download');parent.postMessage('download','*')}function onGameComplete(){console.log('complete');parent.postMessage('complete','*')}</script>"
+		},
+		"Facebook": {
+			"body": "<script type='text/javascript' charset='utf-8'>window.apiName='Facebook';function AdRedirectProcessing(){FbPlayableAd.onCTAClick()}</script>"
+		},
+		"Moloco": {
+			"channel": "moloco",
+			"body": "<script type='text/javascript' charset='utf-8'>window.apiName='Moloco';function AdRedirectProcessing(){FbPlayableAd.onCTAClick()}</script>"
+		},
+		"Tiktok": {
+			"body": "<script type='text/javascript' charset='utf-8'>window.apiName='Tiktok';function AdRedirectProcessing(){window.openAppStore()}</script>"
+		},
+		"AppLovin": {
+			"channel": "applovin",
+			"body": "<script>window.apiName='Applovin';if(mraid.getState()==='loading'){mraid.addEventListener('ready',onSdkReady)}else{onSdkReady()}function viewableChangeHandler(viewable){if(viewable){cc.game.run()}else{cc.game.pause()}}function onSdkReady(){mraid.addEventListener('viewableChange',viewableChangeHandler);if(mraid.isViewable()){showMyAd()}}var url='https://play.google.com/store/apps/details?id=com.volka.taonga';var android='https://play.google.com/store/apps/details?id=com.volka.taonga';if(/android/i.test(navigator.userAgent)){url=android}function showMyAd(){cc.game.run()}function AdRedirectProcessing(){mraid.open(url)}</script>",
+			"sdkScript": "<script src=\"./mraid.js\"></script>"
+		},
+		"IronSource": {
+			"build": "${project}_${channel}_custom_build",
+			"templateData": "some_additional_data_${channelShort}",
+			"body": "<script>window.apiName='IronSource';if(mraid.getState()==='loading'){mraid.addEventListener('ready',onSdkReady)}else{onSdkReady()}function viewableChangeHandler(viewable){if(viewable){cc.game.run()}else{cc.game.pause()}}function onSdkReady(){mraid.addEventListener('viewableChange',viewableChangeHandler);if(mraid.isViewable()){showMyAd()}}var url='https://play.google.com/store/apps/details?id=com.volka.taonga';var android='https://play.google.com/store/apps/details?id=com.volka.taonga';if(/android/i.test(navigator.userAgent)){url=android}function showMyAd(){cc.game.run()}function AdRedirectProcessing(){mraid.open(url)}</script>",
+			"sdkScript": "<script src=\"./mraid.js\"></script>"
+		},
+		"Mintegral": {
+			"channel": "mintegral",
+			"body": "<script type='text/javascript' charset='utf-8'>window.apiName='Mintegral';function gameClose(){cc.game.end()}function gameStart(){cc.game.run()}function AdRedirectProcessing(){window.install && window.install()}</script>"
+		},
+		"Google": {
+			"body": "<script type='text/javascript' async charset='utf-8'>window.apiName='Google';function AdRedirectProcessing(){ExitApi.exit()}</script>"
+		},
+		"GoogleL": {
+			"channel": "google(480x320)",
+			"body": "<script type='text/javascript' async charset='utf-8'>window.apiName='Google';function AdRedirectProcessing(){ExitApi.exit()}</script>"
+		},
+		"GoogleP": {
+			"channel": "google(320x480)",
+			"body": "<script type='text/javascript' async charset='utf-8'>window.apiName='Google';function AdRedirectProcessing(){ExitApi.exit()}</script>"
+		},
+		"Unity": {
+			"channel": "unity",
+			"body": "<script>window.apiName='Unity';if(mraid.getState()==='loading'){mraid.addEventListener('ready',onSdkReady)}else{onSdkReady()}function viewableChangeHandler(viewable){if(viewable){cc.game.run()}else{cc.game.pause()}}function onSdkReady(){mraid.addEventListener('viewableChange',viewableChangeHandler);if(mraid.isViewable()){showMyAd()}}var url='https://play.google.com/store/apps/details?id=com.volka.taonga';var android='https://play.google.com/store/apps/details?id=com.volka.taonga';if(/android/i.test(navigator.userAgent)){url=android}function showMyAd(){cc.game.run()}function AdRedirectProcessing(){mraid.open(url)}</script>",
+			"sdkScript": "<script src=\"./mraid.js\"></script>"
+		}
+	}
+}

@@ -30,6 +30,7 @@ export class UiController extends Component {
     @property(Node)
     canvasNode: Node = null;
 
+
     private _attachBtnsMap: Map<Node, Node | null> = new Map();
 
     private _attachButtonsOffset: Vec2 = null;

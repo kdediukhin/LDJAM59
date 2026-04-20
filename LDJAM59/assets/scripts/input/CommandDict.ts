@@ -57,6 +57,10 @@ export const CommandDict = {
 
 	destroyItemCommand(button: ScreenButton) {
 		gameEventTarget.emit(GameEvent.DESTROY_ITEM, button);
+	},
+
+	toggleSoundCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_SOUND);
 	}
 
 }

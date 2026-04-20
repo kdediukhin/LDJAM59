@@ -29,10 +29,16 @@ export class AudioManager extends Component {
 	// endregion
 
 	// region life-cycle callbacks
+
+	private _isOn: boolean = true;
+	private _soundVolumeMap: Map<AudioSource, number> = new Map();
 	onEnable() {
 		this.backMusic.play();
 
 		this._subscribeEvents(true);
+		this.node.getComponentsInChildren(AudioSource).forEach(source => {
+			this._soundVolumeMap.set(source, source.volume);
+		});
 	}
 
 	onDisable() {
@@ -53,10 +59,18 @@ export class AudioManager extends Component {
 
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
 		gameEventTarget[func](GameEvent.RAY_HIT_FAIL, this.onRayHitFail, this);
-		gameEventTarget[func](GameEvent.TOGGLE_MOVEMENT, this.onToggleMovement, this)
+		gameEventTarget[func](GameEvent.TOGGLE_MOVEMENT, this.onToggleMovement, this);
+		gameEventTarget[func](GameEvent.TOGGLE_SOUND, this.onToggleSound, this);
 	}
 	// endregion
 
+	onToggleSound() {
+		this._isOn = !this._isOn;
+
+		this.node.getComponentsInChildren(AudioSource).forEach(source => {
+			source.volume = this._isOn ? this._soundVolumeMap.get(source) : 0;
+		});
+	}
 	// region event handlers
 	onRayHitSuccess() {
 		this.successSound.play();
