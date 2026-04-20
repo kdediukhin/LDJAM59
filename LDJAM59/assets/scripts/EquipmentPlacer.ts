@@ -27,6 +27,8 @@ export class EquipmentPlacer extends Component {
     private _rotationOffset: Vec2 = null;
     private _uiNode: Node = null;
 
+    private _initalRotation: number | null = null;
+
     onEnable() {
 
         geometry.Plane.fromNormalAndPoint(this._groundPlane, new Vec3(0, 1, 0), Vec3.ZERO);
@@ -95,6 +97,8 @@ export class EquipmentPlacer extends Component {
 
         this._isActivePlacer = isOn;
         this.outline.active = isOn;
+
+        this._initalRotation = isOn? this.node.eulerAngles.y : null;
     }
 
     // private onPurchaseDeny() {
@@ -161,12 +165,16 @@ export class EquipmentPlacer extends Component {
             this._rotationOffset = new Vec2(currentPos.x, currentPos.y);
         }
 
-        const deltaX = currentPos.x - this._rotationOffset.x;
-        const deltaY = currentPos.y - this._rotationOffset.y;
-        const delta = deltaX - deltaY;
-        const rotationY = this.node.eulerAngles.y - delta * 0.1;
-        this.node.setRotationFromEuler(0, rotationY, 0);
-        this._rotationOffset.set(currentPos.x, currentPos.y);
+        const deltaX = currentPos.x - uiPos.x;//this._rotationOffset.x;
+        const deltaY = currentPos.y - uiPos.y;//this._rotationOffset.y;
+        // const delta = deltaX - deltaY;
+        // const rotationY = this.node.eulerAngles.y - deltaY * 0.01;
+        if (this._initalRotation !== null) {
+            const rotationY = this._initalRotation - deltaY;
+            this.node.setRotationFromEuler(0, rotationY, 0);
+            this._rotationOffset.set(currentPos.x, currentPos.y);
+        }
+        
     }
 
 

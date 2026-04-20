@@ -15,7 +15,7 @@ export const CommandDict = {
 	},
 
 	rotateEquipmentCommand(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.ROTATE_PLACER, button.touchCurrPos, button.touchUiPos, button);
+		gameEventTarget.emit(GameEvent.ROTATE_PLACER, button.touchCurrPos, button.touchStartPos, button);
 	},
 
 	pressPurchaseReflectorButtton(button: ScreenButton) {
