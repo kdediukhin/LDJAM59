@@ -152,10 +152,10 @@ export class EquipmentPlacer extends Component {
             this._rotationOffset = new Vec2(currentPos.x, currentPos.y);
         }
 
-        const deltaX = currentPos.x - this._rotationOffset.x;
-        const deltaY = currentPos.y - this._rotationOffset.y;
-        const delta = deltaX - deltaY;
-        const rotationY = this.node.eulerAngles.y - delta * 0.1;
+        const deltaX = currentPos.x - uiPos.x;//this._rotationOffset.x;
+        const deltaY = currentPos.y - uiPos.y;//this._rotationOffset.y;
+        // const delta = deltaX - deltaY;
+        const rotationY = this.node.eulerAngles.y - deltaY * 0.01;
         this.node.setRotationFromEuler(0, rotationY, 0);
         this._rotationOffset.set(currentPos.x, currentPos.y);
     }
