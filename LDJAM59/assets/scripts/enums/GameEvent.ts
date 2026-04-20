@@ -27,8 +27,6 @@ export enum GameEvent {
 	RAY_HIT_RECEIVED = 202,
 	RAY_HIT_SUCCESS = 203,
 
-
-
 	BUY_ITEM = 300,
 	TOGGLE_OVERLAY = 301,
 	ADD_REFLECTOR = 302,

@@ -48,7 +48,6 @@ export class Menu extends Component {
         this.menuMaps.forEach(menuMap => {
             menuMap.button[func](NodeEventType.TOUCH_START, () => this.handleManuAction(menuMap), this);
         });
-
     }
 
     private handleManuAction(menuMap: MenuMap): void {

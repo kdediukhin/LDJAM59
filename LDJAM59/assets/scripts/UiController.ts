@@ -54,6 +54,16 @@ export class UiController extends Component {
         gameEventTarget[func](GameEvent.MOVE_PLACER, this.onMovePlacer, this);
         gameEventTarget[func](GameEvent.TOGGLE_MOVEMENT, this.onToggleMovement, this)
         gameEventTarget[func](GameEvent.ATTACH_UI_TO_PLACER, this.attachUiToPlacer, this);
+
+        gameEventTarget[func](GameEvent.PAUSE_STARSHIPS, () => this.toggleStarshipUI(true), this);
+        gameEventTarget[func](GameEvent.RESUME_STARSHIPS, () => this.toggleStarshipUI(false), this);
+
+    }
+
+    private toggleStarshipUI(isPaused: boolean) {
+        this._attachBtnsMap.forEach((placerNode, attachBtn) => {
+            attachBtn.active = !isPaused;
+        });
     }
 
     private attachUiToPlacer(fn: Function, node: Node, uiPos: Vec3) {
