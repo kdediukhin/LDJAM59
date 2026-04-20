@@ -193,7 +193,11 @@ export class StarshipManager extends Component {
 	}
 
 	_sendAllStarships() {
-
+		this._starships.forEach(starship => {
+			gameEventTarget.emit(GameEvent.REMOVE_SIGNAL, starship.getComponentInChildren(Receiver).colorHex);
+			this._flyAwayStarship(starship);
+		});
+		this._cPathManager.removeAllPaths();
 	}
 	// endregion
 

@@ -49,6 +49,7 @@ export class Earth extends Component {
 
 		gameEventTarget[func](GameEvent.LAUNCH_STARSHIP, this.onLaunchStarship, this);
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
+		gameEventTarget[func](GameEvent.REMOVE_SIGNAL, this.onRemoveSignal, this);
 	}
 	// endregion
 
@@ -75,6 +76,12 @@ export class Earth extends Component {
 	onRayHitSuccess(receiverNode: Node) {
 		const colorHex = receiverNode.getComponent(Receiver).colorHex as Colors;
 
+		const signal = this._signalMap.get(colorHex);
+		signal.destroy();
+		this._signalMap.set(colorHex, null);
+	}
+
+	onRemoveSignal(colorHex: Colors) {
 		const signal = this._signalMap.get(colorHex);
 		signal.destroy();
 		this._signalMap.set(colorHex, null);

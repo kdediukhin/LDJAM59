@@ -77,6 +77,13 @@ export class PathManager extends Component {
 		path.getComponent(PathRenderer).toggleMarks(status);
 
 	}
+
+	removeAllPaths() {
+		this._paths.forEach((path, index) => {
+			path.getComponent(PathRenderer).fade();
+			this._occupationStatus[index] = false;
+		});
+	}
 	// endregion
 
 	// region private methods

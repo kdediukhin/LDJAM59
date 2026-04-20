@@ -52,6 +52,7 @@ export class Balance extends Component {
 
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
 		gameEventTarget[func](GameEvent.RAY_HIT_FAIL, this.onRayHitFail, this);
+		gameEventTarget[func](GameEvent.REQUEST_PURCHASE, this.onRequestPurchase, this);
 	}
 
 	_updateBalance() {
@@ -73,6 +74,16 @@ export class Balance extends Component {
 		}
 		this._hittedNodes.push(reciverNode);
 		
+	}
+
+	onRequestPurchase(price, callback) {
+		if (price <= this._cBalance) {
+			this._cBalance -=  price;
+			this._updateBalance();
+			callback(true);
+		} else {
+			callback(false);
+		}
 	}
 	// endregion
 }
