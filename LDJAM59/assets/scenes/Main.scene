@@ -15584,16 +15584,16 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -6.25,
+      "x": -7.691,
       "y": 0,
-      "z": -60.69
+      "z": -59.681
     },
     "_lrot": {
       "__type__": "cc.Quat",
       "x": 0,
-      "y": 0.11961701586160008,
+      "y": 0.30068083114984173,
       "z": 0,
-      "w": 0.9928201093432615
+      "w": 0.9537248228808142
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -15606,7 +15606,7 @@
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 13.74,
+      "y": 34.997,
       "z": 0
     },
     "_id": "30jrjx8xlGvaLZ7Pbg+sUi"
@@ -16450,7 +16450,10 @@
     "isLooped": false,
     "isIn3DSpace": true,
     "interferePaths": [],
-    "curveDebugPointPrefab": null,
+    "curveDebugPointPrefab": {
+      "__uuid__": "3e94f464-0f1a-4cbd-b8c4-20752dace2d4",
+      "__expectedType__": "cc.Prefab"
+    },
     "curveDebugControlPrefab": null,
     "_id": "d68lhQ0A5EC4RHf8i1GEm5"
   },
