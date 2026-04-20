@@ -68,7 +68,15 @@ export class StateController extends Component {
 			const nextLevelDesc = this._levels[this._cLevel + 1];
 
 			if (nextLevelDesc.countToReach <= this._successCount) {
-				this._cLevel ++
+				this._cLevel ++;
+
+				if (this._cLevel === 2) {
+					gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 1);
+				} else if (this._cLevel === 3) {
+					gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 2);
+				} else if (this._cLevel === 5) {
+					gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 3);
+				}
 			}
 		}
 
