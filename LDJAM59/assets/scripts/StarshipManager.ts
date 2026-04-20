@@ -108,6 +108,7 @@ export class StarshipManager extends Component {
 		// gameEventTarget[func](GameEvent.ALLSCREEN_INPUT, this.onAllscreenInput, this);
 		// gameEventTarget[func](GameEvent.RAY_HIT_RECEIVED, this.onRayHitReceived, this);
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
+		gameEventTarget[func](GameEvent.RAY_HIT_FAIL, this.onRayHitFail, this);
 		gameEventTarget[func](GameEvent.PAUSE_STARSHIPS, this.onPauseStarships, this);
 		gameEventTarget[func](GameEvent.RESUME_STARSHIPS, this.onResumeStarships, this);
 		gameEventTarget[func](GameEvent.LAUNCH_STARSHIP, this.onLaunchStarship, this);
@@ -138,61 +139,45 @@ export class StarshipManager extends Component {
 	_removeStarship(indexToRemove: number) {
 		const starship = this._starships[indexToRemove];
 		const path = starship.getComponent(MoverToPoint).currentPath;
-		// this.pathManager.changePathOccupationStatus(path, false);
 		path.getComponent(PathRenderer).fade();
 
 		this._cPathManager.changePathOccupationStatus(path, false);
 
 		this._starships.splice(indexToRemove, 1);
-		// starship.destroy();
 		this._flyAwayStarship(starship);
 	}
 
 	private _flyAwayStarship(starship: Node) {
-		// const particle = instantiate(this.particlesAcceptPrefab);
-		// particle.getComponentInChildren(ParticleSystem).play();
-		// particle.setParent(starship);
+		const particle = instantiate(this.particlesAcceptPrefab);
+		particle.setParent(starship);
+		particle.getComponent(ParticleSystem).play();
 
-		// Снимаем корабль с текущего пути
 		const mover = starship.getComponent(MoverToPoint);
 		const oldPath = mover.currentPath;
 		this._cPathManager.changePathOccupationStatus(oldPath, false);
 		oldPath.removeMovable(mover.movingEntity);
 
-		// Создаём копию pathAway и ставим её первую точку на текущую позицию корабля
 		const awayPathNode = instantiate(this.pathAway.node);
 		awayPathNode.setParent(this.node);
 		const shipWorldPos = starship.getWorldPosition();
 		const shipWorldRot = starship.getWorldRotation();
 		const awayPath = awayPathNode.getComponent(Path);
 
-		// Смещаем и поворачиваем все точки пути:
-		// 1) сдвигаем первую точку в позицию корабля
-		// 2) поворачиваем вокруг этой точки в соответствии с поворотом корабля
 		const firstPointPos = awayPath.node.children[0]?.getWorldPosition();
 		if (firstPointPos) {
 			awayPath.node.children.forEach(child => {
 				const wp = child.getWorldPosition();
-				// локальное смещение относительно первой точки пути
 				const local = new Vec3(wp.x - firstPointPos.x, wp.y - firstPointPos.y, wp.z - firstPointPos.z);
-				// поворачиваем по кватерниону корабля
 				Vec3.transformQuat(local, local, shipWorldRot);
-				// переносим в мировую позицию корабля
 				child.setWorldPosition(shipWorldPos.x + local.x, shipWorldPos.y + local.y, shipWorldPos.z + local.z);
 			});
 		}
 		awayPath.init();
 
-		// Пускаем корабль по awayPath с ускорением, в конце удаляем оба
 		mover.acceleration = mover.speed * 2;
 		mover.init(awayPath, starship);
-		// Восстанавливаем поворот до перехода — MovingEntity в конструкторе
-		// сразу snap-ает ноду, поэтому перезаписываем обратно и правим startRotation,
-		// чтобы первый slerp плавно начинался с текущего поворота корабля
 		starship.setWorldRotation(shipWorldRot);
 		mover.movingEntity.startRotation = shipWorldRot.clone();
-
-		// Твин уменьшения масштаба — корабль «улетает вдаль»
 
 		tween(starship)
 			.to(3, { scale: new Vec3(0.01, 0.01, 0.01) }, { easing: easing.quadIn })
@@ -224,7 +209,15 @@ export class StarshipManager extends Component {
 			}
 		}
 	}
-
+	onRayHitFail(receiverNode: Node) {
+		for (const [starship, receiver] of this._shipReceivers.entries()) {
+			if (receiver.node === receiverNode) {
+				const particle = instantiate(this.particlesDenyPrefab);
+				particle.setParent(receiverNode);
+				particle.getComponent(ParticleSystem).play();
+			}
+		}
+	}
 	onAllscreenInput(touchLoc: Vec2) {
 		const ray = new geometry.Ray();
 		this.mainCamera.screenPointToRay(touchLoc.x, touchLoc.y, ray);

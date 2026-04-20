@@ -37,7 +37,7 @@ export class EquipmentPlacer extends Component {
 
         let mainCamera: Camera = null;
         gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
-        
+
 
         const worldPos = this.node.getWorldPosition();
         const uiPos = new Vec3();
@@ -50,13 +50,14 @@ export class EquipmentPlacer extends Component {
             console.log(this._uiNode);
         });
 
-
         this._subscribeEvents(true);
     }
 
     onDisable() {
         this.outline.active = false;
         this._subscribeEvents(false);
+
+
     }
 
     private _subscribeEvents(isOn: boolean) {
@@ -65,13 +66,24 @@ export class EquipmentPlacer extends Component {
         // gameEventTarget[func](GameEvent.TOGGLE_PLACER, this.onTogglePlacer, this);
         gameEventTarget[func](GameEvent.MOVE_PLACER, this.onMovePlacer, this);
         gameEventTarget[func](GameEvent.ROTATE_PLACER, this.onRotatePlacer, this);
+        gameEventTarget[func](GameEvent.CAMERA_TRANSITION, this.onCameraTransition, this);
 
 
         gameEventTarget[func](GameEvent.TOGGLE_ROTATION, this.onToggleRotation, this)
         gameEventTarget[func](GameEvent.TOGGLE_MOVEMENT, this.onToggleMovement, this)
 
+        gameEventTarget[func](GameEvent.DESTROY_ITEM, this.onDestroyItem, this);
+
         // gameEventTarget[func](GameEvent.PURCHASE_ACCEPT, this.onPurchaseAccept, this);
         // gameEventTarget[func](GameEvent.PURCHASE_DENY, this.onPurchaseDeny, this);
+
+    }
+
+    onDestroyItem(button: ScreenButton) {
+        if (!button.node.isChildOf(this._uiNode)) return;
+
+        this.node.removeFromParent();
+        this.node.destroy();
 
     }
 
@@ -99,7 +111,7 @@ export class EquipmentPlacer extends Component {
         this._isActivePlacer = isOn;
         this.outline.active = isOn;
 
-        this._initalRotation = isOn? this.node.eulerAngles.y : null;
+        this._initalRotation = isOn ? this.node.eulerAngles.y : null;
     }
 
     // private onPurchaseDeny() {
@@ -119,6 +131,20 @@ export class EquipmentPlacer extends Component {
     //     this.outline.active = false;
 
     // }
+
+    private onCameraTransition(setupIndex: number, time: number = .5) {
+        this.scheduleOnce(() => {
+            let mainCamera: Camera = null;
+            gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
+
+
+            const worldPos = this.node.getWorldPosition();
+            const uiPos = new Vec3();
+            mainCamera.worldToScreen(worldPos, uiPos);
+
+            gameEventTarget.emit(GameEvent.UPDATE_UI_POSITION, this.node, uiPos);
+        }, time);
+    }
 
     private onMovePlacer(currentPos: Vec2, uiPos: Vec2, button: ScreenButton) {
 
@@ -175,7 +201,7 @@ export class EquipmentPlacer extends Component {
             this.node.setRotationFromEuler(0, rotationY, 0);
             this._rotationOffset.set(currentPos.x, currentPos.y);
         }
-        
+
     }
 
 

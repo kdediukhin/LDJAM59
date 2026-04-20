@@ -40,7 +40,7 @@ export const CommandDict = {
 	},
 
 	toggleRotationOn(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true, button);		
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true, button);
 	},
 
 	toggleRotationOff(button: ScreenButton) {
@@ -48,11 +48,15 @@ export const CommandDict = {
 	},
 
 	toggleMovementOn(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true, button);		
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true, button);
 	},
 
 	toggleMovementOff(button: ScreenButton) {
 		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, false, button);
+	},
+
+	destroyItemCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.DESTROY_ITEM, button);
 	}
 
 }

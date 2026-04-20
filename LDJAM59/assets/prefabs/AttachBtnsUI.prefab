@@ -23,16 +23,19 @@
       },
       {
         "__id__": 14
+      },
+      {
+        "__id__": 26
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 26
+        "__id__": 35
       }
     ],
     "_prefab": {
-      "__id__": 28
+      "__id__": 37
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -89,7 +92,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 50,
+      "x": 80,
       "y": 30,
       "z": 0
     },
@@ -164,10 +167,10 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 77
+      "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "f81550dd-0759-4d5a-b58e-dcfc7810e068@f9941",
+      "__uuid__": "44aea507-f4ee-41e4-9ef9-e972f2bb969f@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -285,8 +288,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -50,
-      "y": 30,
+      "x": 100,
+      "y": 3.244000000000028,
       "z": 0
     },
     "_lrot": {
@@ -360,10 +363,10 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 77
+      "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "e5f79ed7-a187-4edc-8ff9-437fac5d3786@f9941",
+      "__uuid__": "c7af708b-c79f-4dbd-9dc1-ba68927b0195@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -456,6 +459,178 @@
     "nestedPrefabInstanceRoots": null
   },
   {
+    "__type__": "cc.Node",
+    "_name": "btn_destroy",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 27
+      },
+      {
+        "__id__": 29
+      },
+      {
+        "__id__": 31
+      }
+    ],
+    "_prefab": {
+      "__id__": 34
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": -80,
+      "y": 30,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 0.5,
+      "y": 0.5,
+      "z": 0.5
+    },
+    "_mobility": 0,
+    "_layer": 33554432,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 26
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 28
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 60,
+      "height": 60
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "a2m3qhaWRKd4CE91YZ19Pq"
+  },
+  {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 26
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 30
+    },
+    "_customMaterial": null,
+    "_srcBlendFactor": 2,
+    "_dstBlendFactor": 4,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_spriteFrame": {
+      "__uuid__": "c2c2fffb-99d3-42b8-9d06-7a19147baae3@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "_type": 0,
+    "_fillType": 0,
+    "_sizeMode": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_useGrayscale": false,
+    "_atlas": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "99PzzFkURJb51B0Zcu5kVi"
+  },
+  {
+    "__type__": "d0ef1u/cFhKkaBDnsyHE1zy",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 26
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 32
+    },
+    "interCommandPairs": [
+      {
+        "__id__": 33
+      }
+    ],
+    "customFields": [],
+    "buttonName": "destroy",
+    "touchStartPos": null,
+    "touchCurrPos": null,
+    "touchUiPos": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "c4WECjgBREDo2egmBPSkLH"
+  },
+  {
+    "__type__": "InteractionCommandPair",
+    "interactionType": 1,
+    "commandName": "destroyItemCommand"
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "97SmkJgj1PQr4QDGfw7PNw",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -465,7 +640,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 27
+      "__id__": 36
     },
     "_contentSize": {
       "__type__": "cc.Size",

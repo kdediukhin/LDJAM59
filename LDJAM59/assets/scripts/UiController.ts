@@ -37,7 +37,6 @@ export class UiController extends Component {
 
     onEnable() {
         this._subscribeEvents(true);
-        // this.chooseScreen.active = false;
     }
 
     protected onDisable(): void {
@@ -57,6 +56,9 @@ export class UiController extends Component {
 
         gameEventTarget[func](GameEvent.PAUSE_STARSHIPS, () => this.toggleStarshipUI(true), this);
         gameEventTarget[func](GameEvent.RESUME_STARSHIPS, () => this.toggleStarshipUI(false), this);
+        gameEventTarget[func](GameEvent.DESTROY_ITEM, this.onDestroyItem, this);
+        gameEventTarget[func](GameEvent.UPDATE_UI_POSITION, this.onUpdateUiPosition, this);
+
 
     }
 
@@ -64,6 +66,24 @@ export class UiController extends Component {
         this._attachBtnsMap.forEach((placerNode, attachBtn) => {
             attachBtn.active = !isPaused;
         });
+    }
+
+
+    onDestroyItem(button: ScreenButton) {
+        const attachBtn = Array.from(this._attachBtnsMap.keys()).find(btn => btn.getComponentsInChildren(ScreenButton).includes(button));
+
+        this._attachBtnsMap.delete(attachBtn);
+        attachBtn.removeFromParent();
+        attachBtn.destroy();
+    }
+
+    private onUpdateUiPosition(node: Node, uiPos: Vec3) {
+        const attachBtn = Array.from(this._attachBtnsMap.keys()).find(btn => this._attachBtnsMap.get(btn) === node);
+        if (attachBtn) {
+            const worldPos = new Vec3();
+            this.uiCamera.screenToWorld(uiPos, worldPos);
+            attachBtn.worldPosition = worldPos;
+        }
     }
 
     private attachUiToPlacer(fn: Function, node: Node, uiPos: Vec3) {
