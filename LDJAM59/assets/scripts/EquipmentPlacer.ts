@@ -1,4 +1,4 @@
-import { _decorator, Camera, CCFloat, Color, Component, director, game, geometry, Material, MeshRenderer, Node, Vec2, Vec3 } from 'cc';
+import { _decorator, Camera, CCFloat, Color, Component, director, easing, game, geometry, Material, MeshRenderer, Node, tween, Vec2, Vec3 } from 'cc';
 import { gameEventTarget } from './plugins/GameEventTarget';
 import { GameEvent } from './enums/GameEvent';
 import { ScreenButton } from './input/ScreenButton';
@@ -28,6 +28,8 @@ export class EquipmentPlacer extends Component {
     private _uiNode: Node = null;
 
     private _initalRotation: number | null = null;
+    private _startPosition: Vec3 = null;
+    private _isTweening: boolean = false;
 
     onEnable() {
 
@@ -89,11 +91,34 @@ export class EquipmentPlacer extends Component {
 
     private onToggleMovement(isOn: boolean, button: ScreenButton) {
         if (!button.node.isChildOf(this._uiNode)) return;
+        if (this._isTweening) return;
 
         this._isMovementMode = isOn;
         this._isRotationMode = !isOn;
         this._movementOffset = null;
         this._rotationOffset = null;
+
+        if (isOn) {
+            this._startPosition = this.node.getWorldPosition().clone();
+        } else if (!this._isPlaceAvailable && this._startPosition) {
+            this._isTweening = true;
+            this.schedule(this._updateUiPosition, 0);
+            tween(this.node)
+                .to(0.3, { worldPosition: this._startPosition }, { easing: easing.quadOut })
+                .call(() => {
+                    this.unschedule(this._updateUiPosition);
+                    this._updateUiPosition();
+                    this._isTweening = false;
+                    this._isPlaceAvailable = true;
+                    this.outline.active = false;
+                    if (this._outlineMaterial) {
+                        this._outlineMaterial.setProperty('color', this._availableOultineColor);
+                    }
+                    gameEventTarget.emit(GameEvent.TOGGLE_CHECK_MARK, true);
+                })
+                .start();
+            return;
+        }
 
         this._isActivePlacer = isOn;
         this.outline.active = isOn;
@@ -132,6 +157,15 @@ export class EquipmentPlacer extends Component {
 
     // }
 
+    private _updateUiPosition = (): void => {
+        let mainCamera: Camera = null;
+        gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
+        if (!mainCamera) return;
+        const uiPos = new Vec3();
+        mainCamera.worldToScreen(this.node.getWorldPosition(), uiPos);
+        gameEventTarget.emit(GameEvent.UPDATE_UI_POSITION, this.node, uiPos);
+    }
+
     private onCameraTransition(setupIndex: number, time: number = .5) {
         this.scheduleOnce(() => {
             let mainCamera: Camera = null;
@@ -149,6 +183,7 @@ export class EquipmentPlacer extends Component {
     private onMovePlacer(currentPos: Vec2, uiPos: Vec2, button: ScreenButton) {
 
         if (!this._isActivePlacer) return;
+        if (this._isTweening) return;
         if (!button.node.isChildOf(this._uiNode)) return;
         if (!currentPos) return;
 

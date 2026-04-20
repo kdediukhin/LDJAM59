@@ -31,17 +31,17 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 24
+        "__id__": 27
       },
       {
-        "__id__": 26
+        "__id__": 29
       },
       {
-        "__id__": 28
+        "__id__": 31
       }
     ],
     "_prefab": {
-      "__id__": 30
+      "__id__": 33
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -226,9 +226,9 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 0.3,
+      "x": 0.4,
       "y": 0.1,
-      "z": 0.3
+      "z": 0.4
     },
     "_mobility": 0,
     "_layer": 1073741824,
@@ -366,6 +366,15 @@
       },
       {
         "__id__": 22
+      },
+      {
+        "__id__": 24
+      },
+      {
+        "__id__": 25
+      },
+      {
+        "__id__": 26
       }
     ],
     "removedComponents": []
@@ -411,10 +420,10 @@
     ],
     "value": {
       "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
+      "x": -0.23543556362037188,
+      "y": -0.2948049473941796,
+      "z": 0.07410780942397875,
+      "w": 0.9231295526398515
     }
   },
   {
@@ -427,9 +436,9 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
+      "x": -24,
+      "y": -32,
+      "z": 16
     }
   },
   {
@@ -465,6 +474,52 @@
     ]
   },
   {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 21
+    },
+    "propertyPath": [
+      "_lrot"
+    ],
+    "value": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 21
+    },
+    "propertyPath": [
+      "_euler"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 16
+    },
+    "propertyPath": [
+      "_lscale"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 2,
+      "y": 2,
+      "z": 2
+    }
+  },
+  {
     "__type__": "cc.SphereCollider",
     "_name": "",
     "_objFlags": 0,
@@ -474,7 +529,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 25
+      "__id__": 28
     },
     "_material": null,
     "_isTrigger": true,
@@ -501,7 +556,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 27
+      "__id__": 30
     },
     "amplifyPower": 10,
     "_id": ""
@@ -520,7 +575,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 29
+      "__id__": 32
     },
     "outline": {
       "__id__": 7
