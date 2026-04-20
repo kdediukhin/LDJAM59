@@ -12,6 +12,9 @@ export class MoverToPoint extends Component {
 	// region editors' fields and properties
 	@property
     speed: number = 1;
+
+	@property
+	acceleration: number = 0;
 	// endregion
 
 	// region public fields and properties
@@ -24,6 +27,8 @@ export class MoverToPoint extends Component {
 	
 	public hasArrived: boolean = true;
 	public isPaused: boolean = false;
+
+	private _currentSpeed: number = 0;
 	// endregion
 
 	// region private fields and properties
@@ -40,26 +45,31 @@ export class MoverToPoint extends Component {
 
 	update(deltaTime: number) {
 		if (!this.hasArrived && !this.isPaused) {
+			if (this.acceleration !== 0) {
+				this._currentSpeed += this.acceleration * deltaTime;
+				if (this._currentSpeed < 0) this._currentSpeed = 0;
+			}
+			const spd = this.acceleration !== 0 ? this._currentSpeed : this.speed;
 			if (this.movingEntity.targetPoint && !this.hasArrived) {
-				const direction: Vec3 = Vec3.subtract(new Vec3(), this.movingEntity.targetPoint, this.movingEntity.node.worldPosition);
-				const distanceToTarget: number = Vec3.distance(this.movingEntity.node.worldPosition, this.movingEntity.targetPoint);
+					const direction: Vec3 = Vec3.subtract(new Vec3(), this.movingEntity.targetPoint, this.movingEntity.node.worldPosition);
+					const distanceToTarget: number = Vec3.distance(this.movingEntity.node.worldPosition, this.movingEntity.targetPoint);
 
-				if (distanceToTarget > this.speed * deltaTime) {
-					const velocity: Vec3 = direction.normalize().multiplyScalar(this.speed * deltaTime);
-					const position: Vec3 = this.movingEntity.node.worldPosition.clone();
-					position.add(velocity);
-					this.movingEntity.node.setWorldPosition(position);
+					if (distanceToTarget > spd * deltaTime) {
+						const velocity: Vec3 = direction.normalize().multiplyScalar(spd * deltaTime);
+						const position: Vec3 = this.movingEntity.node.worldPosition.clone();
+						position.add(velocity);
+						this.movingEntity.node.setWorldPosition(position);
 
-					this.movingEntity.passedDistance += velocity.length();
-					this.movingEntity.pathPercentage = this.movingEntity.passedDistance / this.currentPath.pathLength;
+						this.movingEntity.passedDistance += velocity.length();
+						this.movingEntity.pathPercentage = this.movingEntity.passedDistance / this.currentPath.pathLength;
 
-					const passedDistanceRatio: number = Vec3.distance(this.movingEntity.startPoint, this.movingEntity.node.worldPosition) / this.movingEntity.pathSegmentLength;
-					let rotation: Quat = new Quat();
-					Quat.slerp(rotation, this.movingEntity.startRotation, this.movingEntity.endRotation, passedDistanceRatio);
-					this.movingEntity.node.setWorldRotation(rotation);
-				} else {
+						const passedDistanceRatio: number = Vec3.distance(this.movingEntity.startPoint, this.movingEntity.node.worldPosition) / this.movingEntity.pathSegmentLength;
+						let rotation: Quat = new Quat();
+						Quat.slerp(rotation, this.movingEntity.startRotation, this.movingEntity.endRotation, passedDistanceRatio);
+						this.movingEntity.node.setWorldRotation(rotation);
+					} else {
 					const leftDirection: Vec3 = Vec3.subtract(new Vec3(), this.movingEntity.pathPoints[this.movingEntity.pathPoints.length - 1], this.movingEntity.targetPoint);
-					const leftVelocity: Vec3 = leftDirection.normalize().multiplyScalar((this.speed * deltaTime) - distanceToTarget);
+					const leftVelocity: Vec3 = leftDirection.normalize().multiplyScalar((spd * deltaTime) - distanceToTarget);
 					const leftPosition: Vec3 = this.movingEntity.targetPoint.clone();
 					leftPosition.add(leftVelocity);
 					this.movingEntity.node.setWorldPosition(leftPosition);
@@ -127,7 +137,7 @@ export class MoverToPoint extends Component {
 		}
 
 		this.moveEndCallback = moveEndCallback;
-
+		this._currentSpeed = this.speed;
 		this.hasArrived = false;
 
 		//@ts-ignore

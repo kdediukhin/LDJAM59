@@ -1,4 +1,4 @@
-import { _decorator, Camera, Color, Component, Enum, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Vec2 } from 'cc';
+import { _decorator, Camera, Color, Component, Enum, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Quat, Vec2, Vec3 } from 'cc';
 import { PathManager } from './PathManager';
 import { MoverToPoint } from './mover/MoverToPoint';
 import { Path } from './mover/Path';
@@ -32,6 +32,15 @@ export class StarshipManager extends Component {
 
 	@property(Camera)
 	mainCamera: Camera;
+
+	@property(Prefab)
+	particlesAcceptPrefab: Prefab;
+
+	@property(Prefab)
+	particlesDenyPrefab: Prefab;
+
+	@property(Path)
+	pathAway: Path;
 	// endregion
 
 	// region public fields and properties
@@ -128,7 +137,54 @@ export class StarshipManager extends Component {
 		this.pathManager.changePathOccupationStatus(path, false);
 
 		this._starships.splice(indexToRemove, 1);
-		starship.destroy();
+		// starship.destroy();
+		this._flyAwayStarship(starship);
+	}
+
+	private _flyAwayStarship(starship: Node) {
+		const particle = instantiate(this.particlesAcceptPrefab);
+		particle.setParent(starship);
+
+		// Снимаем корабль с текущего пути
+		const mover = starship.getComponent(MoverToPoint);
+		const oldPath = mover.currentPath;
+		this.pathManager.changePathOccupationStatus(oldPath, false);
+		oldPath.removeMovable(mover.movingEntity);
+
+		// Создаём копию pathAway и ставим её первую точку на текущую позицию корабля
+		const awayPathNode = instantiate(this.pathAway.node);
+		awayPathNode.setParent(this.node);
+		const shipWorldPos = starship.getWorldPosition();
+		const shipWorldRot = starship.getWorldRotation();
+		const awayPath = awayPathNode.getComponent(Path);
+
+		// Смещаем и поворачиваем все точки пути:
+		// 1) сдвигаем первую точку в позицию корабля
+		// 2) поворачиваем вокруг этой точки в соответствии с поворотом корабля
+		const firstPointPos = awayPath.node.children[0]?.getWorldPosition();
+		if (firstPointPos) {
+			awayPath.node.children.forEach(child => {
+				const wp = child.getWorldPosition();
+				// локальное смещение относительно первой точки пути
+				const local = new Vec3(wp.x - firstPointPos.x, wp.y - firstPointPos.y, wp.z - firstPointPos.z);
+				// поворачиваем по кватерниону корабля
+				Vec3.transformQuat(local, local, shipWorldRot);
+				// переносим в мировую позицию корабля
+				child.setWorldPosition(shipWorldPos.x + local.x, shipWorldPos.y + local.y, shipWorldPos.z + local.z);
+			});
+		}
+		awayPath.init();
+
+		// Пускаем корабль по awayPath с ускорением, в конце удаляем оба
+		mover.acceleration = mover.speed * 2;
+		mover.init(awayPath, starship);
+		mover.move(null, () => {
+			awayPathNode.destroy();
+			const idx = this._starships.indexOf(starship);
+			if (idx > -1) this._starships.splice(idx, 1);
+			this._shipReceivers.delete(starship);
+			starship.destroy();
+		});
 	}
 	// endregion
 
