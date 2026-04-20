@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "a9c61600-2946-4e90-a6da-8cdd664d41fb",
+  "uuid": "b4e4d8da-137c-4971-b4a0-22850b2a1338",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Ui"
+    "syncNodeName": "PathAway"
   }
 }

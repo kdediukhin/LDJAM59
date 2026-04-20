@@ -74,7 +74,8 @@ export class StarshipManager extends Component {
 		const starship = instantiate(this.starshipPrefab[Math.floor(Math.random() * this.starshipPrefab.length)]);
 		starship.setParent(this.node);
 		console.log(path);
-		
+		if (!path) return;
+
 
 		this._setStarshipOnPath(starship, path);
 		this._cPathManager.changePathOccupationStatus(path, true);
@@ -139,7 +140,7 @@ export class StarshipManager extends Component {
 		const path = starship.getComponent(MoverToPoint).currentPath;
 		// this.pathManager.changePathOccupationStatus(path, false);
 		path.getComponent(PathRenderer).fade();
- 
+
 		this._cPathManager.changePathOccupationStatus(path, false);
 
 		this._starships.splice(indexToRemove, 1);
@@ -192,7 +193,7 @@ export class StarshipManager extends Component {
 		mover.movingEntity.startRotation = shipWorldRot.clone();
 
 		// Твин уменьшения масштаба — корабль «улетает вдаль»
-		
+
 		tween(starship)
 			.to(3, { scale: new Vec3(0.01, 0.01, 0.01) }, { easing: easing.quadIn })
 			.start();

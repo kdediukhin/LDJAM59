@@ -37,6 +37,7 @@ export class EquipmentPlacer extends Component {
 
         let mainCamera: Camera = null;
         gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
+        
 
         const worldPos = this.node.getWorldPosition();
         const uiPos = new Vec3();
