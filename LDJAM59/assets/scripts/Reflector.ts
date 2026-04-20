@@ -10,7 +10,9 @@ export class Reflector extends Component {
     protected mainCamera: Camera = null;
 
     protected onEnable(): void {
-        this.mainCamera = director.getScene().getComponentInChildren(Camera);
+        let mainCamera: Camera = null;
+        gameEventTarget.emit(GameEvent.GET_MAIN_CAMERA, (cam) => mainCamera = cam);
+        this.mainCamera = mainCamera;
         this._subscribeEvents(true);
 
         // this.scheduleOnce(() => {
@@ -47,10 +49,8 @@ export class Reflector extends Component {
 
         const result = PhysicsSystem.instance.raycastClosestResult;
         const hitNode = result.collider.node;
-        console.log('44');
 
         if (hitNode !== this.node && !this.node.children.includes(hitNode)) return;
-        console.log('55');
 
 
         const currEulerAngles = this.node.eulerAngles.clone();

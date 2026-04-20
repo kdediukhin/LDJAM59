@@ -4,15 +4,18 @@ import { GameEvent } from '../enums/GameEvent'
 import { ScreenButton } from './ScreenButton';
 
 export const CommandDict = {
-	
-	
-	allscreenUpCommand(button: ScreenButton) {
 
+
+	allscreenUpCommand(button: ScreenButton) {
 		gameEventTarget.emit(GameEvent.ALLSCREEN_INPUT, button.touchCurrPos);
 	},
-	
+
 	moveEquipmentCommand(button: ScreenButton) {
-		gameEventTarget.emit(GameEvent.MOVE_PLACER, button.touchCurrPos);
+		gameEventTarget.emit(GameEvent.MOVE_PLACER, button.touchCurrPos, button.touchUiPos, button);
+	},
+
+	rotateEquipmentCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.ROTATE_PLACER, button.touchCurrPos, button.touchUiPos, button);
 	},
 
 	pressPurchaseReflectorButtton(button: ScreenButton) {
@@ -27,10 +30,29 @@ export const CommandDict = {
 
 
 	checkPressCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.PURCHASE_ACCEPT, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, false);
 	},
 
 	denyPressCommand(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.PURCHASE_DENY, true);
 		gameEventTarget.emit(GameEvent.TOGGLE_OVERLAY, false);
+	},
+
+	toggleRotationOn(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, true, button);		
+	},
+
+	toggleRotationOff(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_ROTATION, false, button);
+	},
+
+	toggleMovementOn(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, true, button);		
+	},
+
+	toggleMovementOff(button: ScreenButton) {
+		gameEventTarget.emit(GameEvent.TOGGLE_MOVEMENT, false, button);
 	}
+
 }

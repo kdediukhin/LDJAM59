@@ -43,6 +43,13 @@
         "__uuid__": "34ca882d-ba2b-48ea-b533-31bd0d03c13a@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
+      "tintColor": {
+        "__type__": "cc.Color",
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 77
+      },
       "alphaTexture": {
         "__uuid__": "0ca3d4da-30c8-4074-84b6-7099880c538b@6c48a",
         "__expectedType__": "cc.Texture2D"

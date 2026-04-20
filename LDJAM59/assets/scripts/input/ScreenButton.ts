@@ -51,6 +51,11 @@ export class ScreenButton extends Component {
 	})
 	touchCurrPos: Vec2 = null;
 
+	@property({
+		visible: false
+	})
+	touchUiPos: Vec2 = null;
+
 	commandMap: Map<InteractionType, Function> = new Map();
 	statusMap: Map<InteractionType, boolean> = new Map();
 	_customFields;
@@ -94,6 +99,7 @@ export class ScreenButton extends Component {
 
 		this.touchStartPos = event.getLocation();
 		this.touchCurrPos = event.getLocation();
+		this.touchUiPos = event.getUILocation();
 	}
 
 	onTouchEnd(event: EventTouch) {
@@ -101,6 +107,8 @@ export class ScreenButton extends Component {
 		this.scheduleOnce(() => {
 			this.touchStartPos = null;
 			this.touchCurrPos = null;
+			this.touchUiPos = null;
+
 		});
 	}
 
@@ -109,11 +117,13 @@ export class ScreenButton extends Component {
 
 		this.touchStartPos = null;
 		this.touchCurrPos = null;
+		this.touchUiPos = null;
 	}
 
 	onTouchMove(event: EventTouch) {
 		this.statusMap.set(InteractionType.Move, true);
 
 		this.touchCurrPos = event.getLocation();
+		this.touchUiPos = event.getUILocation();
 	}
 }

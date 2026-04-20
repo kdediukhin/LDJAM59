@@ -130,12 +130,25 @@
     ],
     "_visFlags": 0,
     "_texture": {
-      "__uuid__": "2b620bc3-3803-46a1-9651-bc361f861c90@6c48a",
+      "__uuid__": "34ca882d-ba2b-48ea-b533-31bd0d03c13a@6c48a",
       "__expectedType__": "cc.Texture2D"
     },
     "_material": null,
     "_worldSpace": true,
-    "_positions": [],
+    "_positions": [
+      {
+        "__type__": "cc.Vec3",
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "__type__": "cc.Vec3",
+        "x": 5,
+        "y": 0,
+        "z": 0
+      }
+    ],
     "_width": {
       "__id__": 5
     },
