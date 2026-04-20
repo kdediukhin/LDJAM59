@@ -21,6 +21,7 @@ export class Earth extends Component {
 
 	// region private fields and properties
 	_signalMap: Map<Colors, Node | null> = new Map();
+	_isFirst: boolean = true;
 	// endregion
 
 	// region life-cycle callbacks
@@ -58,8 +59,15 @@ export class Earth extends Component {
 		signal.setPosition(v3());
 
 		signal.getComponent(SignalRay).colorHex = colorHex;
-		const randAngle = Math.PI / 2 * Math.random();
-		signal.getComponent(SignalRay).direction = v3(Math.cos(randAngle), 0, -Math.sin(randAngle));
+		let angle;
+		if (this._isFirst) {
+			angle = Math.PI / 2 *.75;
+			this._isFirst = false;
+		} else {
+			angle = Math.PI / 2 * Math.random();
+		}
+		
+		signal.getComponent(SignalRay).direction = v3(Math.cos(angle), 0, -Math.sin(angle));
 
 		this._signalMap.set(colorHex, signal);
 	}
