@@ -32,10 +32,10 @@ export class StateController extends Component {
 		this._levels = [
 			{countToReach: 0, starshipCount: 1},
 			{countToReach: 3, starshipCount: 2},
-			{countToReach: 5, starshipCount: 3/*4*/},
-			{countToReach: 9, starshipCount: 3/*6*/},
-			{countToReach: 13, starshipCount: 3/*8*/},
-			{countToReach: 19, starshipCount: 3/*10*/}
+			{countToReach: 5, starshipCount: 4},
+			{countToReach: 9, starshipCount: 6},
+			{countToReach: 13, starshipCount: 8},
+			{countToReach: 19, starshipCount: 10}
 		]
 
 		this._colorsNotUsed = Object.values(Colors).slice();
@@ -69,6 +69,8 @@ export class StateController extends Component {
 
 			if (nextLevelDesc.countToReach <= this._successCount) {
 				this._cLevel ++;
+
+				gameEventTarget.emit(GameEvent.LEVEL_UPDATE, this._cLevel);
 
 				if (this._cLevel === 2) {
 					gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 1);
@@ -111,7 +113,6 @@ export class StateController extends Component {
 		this.scheduleOnce(() => {
 			this._checkLevelAndStarships();			
 		});
-		
 	}
 	// endregion
 }

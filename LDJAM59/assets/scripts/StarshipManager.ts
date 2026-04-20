@@ -18,8 +18,8 @@ export class StarshipManager extends Component {
 	@property([Prefab])
 	starshipPrefab: Prefab[] = [];
 
-	@property(PathManager)
-	pathManager: PathManager;
+	@property([PathManager])
+	pathManagers: PathManager[] = [];
 
 	@property
 	relaunchInterval: number = 3;
@@ -41,11 +41,12 @@ export class StarshipManager extends Component {
 	_starships: Node[] = [];
 	private _colorHex: string
 	private _shipReceivers: Map<Node, Receiver> = new Map();
+	private _cPathManager: PathManager;
 	// endregion
 
 	// region life-cycle callbacks
 	onEnable() {
-
+		this._cPathManager = this.pathManagers[0];
 		this._subscribeEvents(true);
 	}
 
@@ -60,12 +61,12 @@ export class StarshipManager extends Component {
 
 	// region public methods
 	launchStarship(colorHex: Colors) {
-		const path = this.pathManager.getAvaliablePath();
+		const path = this._cPathManager.getAvaliablePath();
 		const starship = instantiate(this.starshipPrefab[Math.floor(Math.random() * this.starshipPrefab.length)]);
 		starship.setParent(this.node);
 
 		this._setStarshipOnPath(starship, path);
-		this.pathManager.changePathOccupationStatus(path, true);
+		this._cPathManager.changePathOccupationStatus(path, true);
 
 
 		this._colorHex = colorHex;
@@ -98,6 +99,7 @@ export class StarshipManager extends Component {
 		gameEventTarget[func](GameEvent.PAUSE_STARSHIPS, this.onPauseStarships, this);
 		gameEventTarget[func](GameEvent.RESUME_STARSHIPS, this.onResumeStarships, this);
 		gameEventTarget[func](GameEvent.LAUNCH_STARSHIP, this.onLaunchStarship, this);
+		gameEventTarget[func](GameEvent.LEVEL_UPDATE, this.onLevelUpdate, this);
 	}
 
 	_setStarshipOnPath(starship: Node, path: Path) {
@@ -111,8 +113,6 @@ export class StarshipManager extends Component {
 				this._setStarshipOnPath(starship, path);
 			}, this.relaunchInterval);
 		});
-
-
 	}
 
 	_setStarshipColor(material: Material, starship: Node, path: Path) {
@@ -125,10 +125,14 @@ export class StarshipManager extends Component {
 	_removeStarship(indexToRemove: number) {
 		const starship = this._starships[indexToRemove];
 		const path = starship.getComponent(MoverToPoint).currentPath;
-		this.pathManager.changePathOccupationStatus(path, false);
+		this._cPathManager.changePathOccupationStatus(path, false);
 
 		this._starships.splice(indexToRemove, 1);
 		starship.destroy();
+	}
+
+	_sendAllStarships() {
+
 	}
 	// endregion
 
@@ -178,6 +182,27 @@ export class StarshipManager extends Component {
 
 	onLaunchStarship(colorHex: Colors) {
 		this.launchStarship(colorHex);
+	}
+
+	onLevelUpdate(newLevel: number) {
+		this._sendAllStarships();
+		switch (newLevel) {
+			case 1:
+				this._cPathManager = this.pathManagers[1];
+				break;
+			case 2:
+				this._cPathManager = this.pathManagers[2];
+				break;
+			case 3:
+				this._cPathManager = this.pathManagers[3];
+				break;
+			case 4:
+				this._cPathManager = this.pathManagers[3];
+				break;
+			case 5:
+				this._cPathManager = this.pathManagers[4];
+				break;
+		}
 	}
 	// endregion
 }
