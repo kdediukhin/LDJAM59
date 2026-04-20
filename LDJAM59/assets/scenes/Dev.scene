@@ -2684,11 +2684,11 @@
     "_enabled": true,
     "__prefab": null,
     "precision": 10,
+    "smoothIterations": 5,
     "isLooped": false,
     "isIn3DSpace": true,
     "interferePaths": [],
     "curveDebugPointPrefab": null,
-    "curveDebugControlPrefab": null,
     "_id": "96qP7f07pNOrJAigmVlfm/"
   },
   {
@@ -2703,6 +2703,10 @@
     "__prefab": null,
     "markPrefab": {
       "__uuid__": "30b4c58b-71c3-48f6-a9aa-8b1d7efb0a33",
+      "__expectedType__": "cc.Prefab"
+    },
+    "linePrefab": {
+      "__uuid__": "62a3a7ee-cb50-48b3-a79e-1aa89d60058f",
       "__expectedType__": "cc.Prefab"
     },
     "marksInterval": 0.5,
@@ -3087,11 +3091,11 @@
     "_enabled": true,
     "__prefab": null,
     "precision": 10,
+    "smoothIterations": 5,
     "isLooped": false,
     "isIn3DSpace": true,
     "interferePaths": [],
     "curveDebugPointPrefab": null,
-    "curveDebugControlPrefab": null,
     "_id": "daWR3k6rVL1axj4bS2X3CH"
   },
   {
@@ -3106,6 +3110,10 @@
     "__prefab": null,
     "markPrefab": {
       "__uuid__": "30b4c58b-71c3-48f6-a9aa-8b1d7efb0a33",
+      "__expectedType__": "cc.Prefab"
+    },
+    "linePrefab": {
+      "__uuid__": "62a3a7ee-cb50-48b3-a79e-1aa89d60058f",
       "__expectedType__": "cc.Prefab"
     },
     "marksInterval": 0.5,
@@ -3391,11 +3399,11 @@
     "_enabled": true,
     "__prefab": null,
     "precision": 10,
+    "smoothIterations": 5,
     "isLooped": false,
     "isIn3DSpace": true,
     "interferePaths": [],
     "curveDebugPointPrefab": null,
-    "curveDebugControlPrefab": null,
     "_id": "e08V7oesZP2rmSPyyQoHq1"
   },
   {
@@ -3410,6 +3418,10 @@
     "__prefab": null,
     "markPrefab": {
       "__uuid__": "30b4c58b-71c3-48f6-a9aa-8b1d7efb0a33",
+      "__expectedType__": "cc.Prefab"
+    },
+    "linePrefab": {
+      "__uuid__": "62a3a7ee-cb50-48b3-a79e-1aa89d60058f",
       "__expectedType__": "cc.Prefab"
     },
     "marksInterval": 0.5,
@@ -3695,11 +3707,11 @@
     "_enabled": true,
     "__prefab": null,
     "precision": 10,
+    "smoothIterations": 5,
     "isLooped": false,
     "isIn3DSpace": true,
     "interferePaths": [],
     "curveDebugPointPrefab": null,
-    "curveDebugControlPrefab": null,
     "_id": "55kn2ODxFB0Izt5/DZ+cpk"
   },
   {
@@ -3714,6 +3726,10 @@
     "__prefab": null,
     "markPrefab": {
       "__uuid__": "30b4c58b-71c3-48f6-a9aa-8b1d7efb0a33",
+      "__expectedType__": "cc.Prefab"
+    },
+    "linePrefab": {
+      "__uuid__": "62a3a7ee-cb50-48b3-a79e-1aa89d60058f",
       "__expectedType__": "cc.Prefab"
     },
     "marksInterval": 0.5,

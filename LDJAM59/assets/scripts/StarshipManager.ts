@@ -1,4 +1,4 @@
-import { _decorator, Camera, Color, Component, Enum, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Quat, Vec2, Vec3 } from 'cc';
+import { _decorator, Camera, Color, Component, easing, Enum, geometry, instantiate, Material, MeshRenderer, Node, Prefab, Quat, tween, Vec2, Vec3 } from 'cc';
 import { PathManager } from './PathManager';
 import { MoverToPoint } from './mover/MoverToPoint';
 import { Path } from './mover/Path';
@@ -83,7 +83,7 @@ export class StarshipManager extends Component {
 		const color = new Color();
 		Color.fromHEX(color, colorHex);
 		material.setProperty('mainColor', color);
-		this._setStarshipColor(material, starship, path);
+		this._setStarshipColor(material, starship, path, colorHex);
 
 		this._starships.push(starship);
 		const receiver = starship.getComponent(Receiver) ?? starship.getComponentInChildren(Receiver);
@@ -124,10 +124,11 @@ export class StarshipManager extends Component {
 
 	}
 
-	_setStarshipColor(material: Material, starship: Node, path: Path) {
+	_setStarshipColor(material: Material, starship: Node, path: Path, colorHex: string) {
 
 		starship.getComponentsInChildren(MeshRenderer).forEach(mesh => mesh.setMaterialInstance(material, 0));
-		path.getComponent(PathRenderer).setMaterial(material);
+		// path.getComponent(PathRenderer).setMaterial(material);
+		path.getComponent(PathRenderer).setColorHex(colorHex);
 
 	}
 
@@ -135,6 +136,8 @@ export class StarshipManager extends Component {
 		const starship = this._starships[indexToRemove];
 		const path = starship.getComponent(MoverToPoint).currentPath;
 		this.pathManager.changePathOccupationStatus(path, false);
+		path.getComponent(PathRenderer).fade();
+ 
 
 		this._starships.splice(indexToRemove, 1);
 		// starship.destroy();
@@ -178,6 +181,18 @@ export class StarshipManager extends Component {
 		// Пускаем корабль по awayPath с ускорением, в конце удаляем оба
 		mover.acceleration = mover.speed * 2;
 		mover.init(awayPath, starship);
+		// Восстанавливаем поворот до перехода — MovingEntity в конструкторе
+		// сразу snap-ает ноду, поэтому перезаписываем обратно и правим startRotation,
+		// чтобы первый slerp плавно начинался с текущего поворота корабля
+		starship.setWorldRotation(shipWorldRot);
+		mover.movingEntity.startRotation = shipWorldRot.clone();
+
+		// Твин уменьшения масштаба — корабль «улетает вдаль»
+		
+		tween(starship)
+			.to(3, { scale: new Vec3(0.01, 0.01, 0.01) }, { easing: easing.quadIn })
+			.start();
+
 		mover.move(null, () => {
 			awayPathNode.destroy();
 			const idx = this._starships.indexOf(starship);

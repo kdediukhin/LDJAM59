@@ -1,5 +1,4 @@
-import { _decorator, Component, Intersection2D, math, Node, Prefab, Quat, Vec2, Vec3 } from 'cc';
-import { BezierCurve } from './BezierCurve';
+import { _decorator, Component, geometry, Node, Prefab, Quat, Vec2, Vec3 } from 'cc';
 import { MovingEntity } from './MovingEntity';
 import { GameEvent } from '../enums/GameEvent';
 import { MoverToPoint } from './MoverToPoint';
@@ -23,6 +22,9 @@ export class Path extends Component {
 	precision: number = 10;
 
 	@property
+	smoothIterations: number = 3;
+
+	@property
 	isLooped: boolean = false;
 
 	@property
@@ -30,17 +32,15 @@ export class Path extends Component {
 
 	@property({
 		type: InterferePath,
-        visible() {
-            return !this.isLooped;
-        }
-    })
+		visible() {
+			return !this.isLooped;
+		}
+	})
 	interferePaths: InterferePath[] = [];
 
 	@property(Prefab)
 	curveDebugPointPrefab: Prefab;
 
-	@property(Prefab)
-	curveDebugControlPrefab: Prefab;
 	// endregion
 
 	// region public fields and properties
@@ -50,12 +50,12 @@ export class Path extends Component {
 	// endregion
 
 	// region private fields and properties
-	private _pathCurve: BezierCurve = null;
 	private _pathBasePoints: Node[] = [];
 	private _pathPoints: Vec3[] = [];
 	private _pathRotations: Quat[] = [];
 
 	private _interferePaths: { path: Path, percentages: Vec2[] }[] = [];
+	private _spline: geometry.Spline = new geometry.Spline();
 	// endregion
 
 	// region life-cycle callbacks
@@ -78,18 +78,12 @@ export class Path extends Component {
 
 	// region public methods
 	init() {
-		if (!this._pathCurve) {
+		if (this._pathPoints.length === 0) {
 			this._pathBasePoints = this.node.children;
-
-			this._pathCurve = new BezierCurve(this.node.children, this.precision, this.curveDebugPointPrefab, this.curveDebugControlPrefab);
-			this._pathCurve.init(this.isLooped, this.isIn3DSpace);
-			this._pathCurve.setDebugPoints(this.node);
-
-			this._pathPoints = this._pathCurve.getFullPath().points;
-			this._pathRotations = this._pathCurve.getFullPath().rotations;
+			this._buildSpline();
 
 			this.interferePaths.forEach(interferePath => {
-				this._interferePaths.push({path: interferePath.pathNode.getComponent(Path), percentages: interferePath.percentages});
+				this._interferePaths.push({ path: interferePath.pathNode.getComponent(Path), percentages: interferePath.percentages });
 			});
 
 			this.pathLength = this.getFullPathLength();
@@ -101,26 +95,15 @@ export class Path extends Component {
 	}
 
 	getFullPath() {
-		return this._pathCurve.getFullPath();
+		return { points: this._pathPoints, rotations: this._pathRotations };
 	}
 
 	getFullPathLength(): number {
-		// let pathLength: number = 0;
-
-		// for (let i = 0; i < this._pathPoints.length; i++) {
-		// 	const startPoint: Vec3 = this._pathPoints[i];
-			
-		// 	if (this._pathPoints[i + 1]) {
-		// 		const endPoint: Vec3 = this._pathPoints[i + 1];
-
-		// 		pathLength += Vec3.distance(startPoint, endPoint);
-		// 	} else {
-		// 		continue;
-		// 	}	
-		// }
-
-		// return pathLength;
-		return this._pathCurve.getFullPathLength();
+		let length = 0;
+		for (let i = 1; i < this._pathPoints.length; i++) {
+			length += Vec3.distance(this._pathPoints[i - 1], this._pathPoints[i]);
+		}
+		return length;
 	}
 
 	getPathPoints(): Vec3[] {
@@ -131,7 +114,7 @@ export class Path extends Component {
 		return this._pathRotations;
 	}
 
-	isObstructed() : boolean {
+	isObstructed(): boolean {
 		for (let i = 0; i < this._interferePaths.length; i++) {
 			const interferePath: { path: Path, percentages: Vec2[] } = this._interferePaths[i];
 			const percentages: Vec2[] = interferePath.percentages.length > 0 ? interferePath.percentages : [new Vec2(0, 1)];
@@ -152,7 +135,7 @@ export class Path extends Component {
 		return false;
 	}
 
-	getDistanceBetweenPoints(startPoint: Vec3, endPoint: Vec3) : number {
+	getDistanceBetweenPoints(startPoint: Vec3, endPoint: Vec3): number {
 		const startPointIndex: number = this._pathPoints.findIndex((point) => Vec3.equals(point, startPoint));
 		const endPointIndex: number = this._pathPoints.findIndex((point) => Vec3.equals(point, endPoint));
 
@@ -178,7 +161,7 @@ export class Path extends Component {
 		const movableIndex: number = this.pathMovables.findIndex((movingEntity) => movingEntity === movingEntityToRemove);
 		if (movableIndex != -1) {
 			this.pathMovables.splice(movableIndex, 1);
-			
+
 			// this.pathMovables[movableIndex] = null;
 
 			// const activeMovables: MovingEntity[] = this.pathMovables.filter((movingEntity) => movingEntity);
@@ -188,13 +171,86 @@ export class Path extends Component {
 		}
 	}
 
-	getCurve(): BezierCurve {
-		return this._pathCurve;
+	getCurve(): geometry.Spline {
+		return this._spline;
 	}
 
 	// region private methods
+	private _buildSpline() {
+		const rawKnots = this._pathBasePoints.map((p) => p.getWorldPosition());
+		const knots = this._chaikin(rawKnots, this.smoothIterations);
+		this._spline.setModeAndKnots(geometry.SplineMode.CATMULL_ROM, knots);
+
+		// Oversampled raw points for arc-length reparameterization
+		const oversample = this.precision * this._pathBasePoints.length * 10;
+		const raw = this._spline.getPoints(oversample);
+
+		// Build cumulative arc-length table
+		const arcLengths: number[] = [0];
+		for (let i = 1; i < raw.length; i++) {
+			arcLengths.push(arcLengths[i - 1] + Vec3.distance(raw[i - 1], raw[i]));
+		}
+		const totalLength = arcLengths[arcLengths.length - 1];
+
+		// Resample at equal arc-length intervals
+		const targetCount = this.precision * this._pathBasePoints.length;
+		const step = totalLength / (targetCount - 1);
+		const evenPoints: Vec3[] = [];
+		let rawIdx = 0;
+		for (let i = 0; i < targetCount; i++) {
+			const targetLen = i * step;
+			while (rawIdx < arcLengths.length - 2 && arcLengths[rawIdx + 1] < targetLen) {
+				rawIdx++;
+			}
+			const segStart = arcLengths[rawIdx];
+			const segEnd = arcLengths[rawIdx + 1] ?? segStart;
+			const t = segEnd === segStart ? 0 : (targetLen - segStart) / (segEnd - segStart);
+			const p = new Vec3();
+			Vec3.lerp(p, raw[rawIdx], raw[rawIdx + 1] ?? raw[rawIdx], t);
+			evenPoints.push(p);
+		}
+
+		this._pathPoints = evenPoints;
+		this._pathRotations = this._pathPoints.map((point, index) => {
+			const quat = new Quat();
+			const prev = this._pathPoints[index - 1];
+			const next = this._pathPoints[index + 1];
+			const dir = new Vec3();
+			if (prev && next) {
+				// центральная разность для промежуточных точек
+				Vec3.subtract(dir, next, prev);
+			} else if (next) {
+				Vec3.subtract(dir, next, point);
+			} else if (prev) {
+				Vec3.subtract(dir, point, prev);
+			}
+			if (dir.lengthSqr() > 0) {
+				dir.normalize();
+				Quat.rotationTo(quat, new Vec3(0, 0, 1), dir);
+			}
+			return quat;
+		});
+	}
+
+	// Chaikin corner-cutting: each iteration replaces every edge with two points at 1/4 and 3/4
+	private _chaikin(pts: Vec3[], iterations: number): Vec3[] {
+		if (iterations <= 0 || pts.length < 2) return pts;
+		const result: Vec3[] = [];
+		const n = pts.length;
+		for (let i = 0; i < n - 1; i++) {
+			const a = new Vec3();
+			const b = new Vec3();
+			Vec3.lerp(a, pts[i], pts[i + 1], 0.25);
+			Vec3.lerp(b, pts[i], pts[i + 1], 0.75);
+			if (i === 0) result.push(pts[0].clone());
+			result.push(a, b);
+			if (i === n - 2) result.push(pts[n - 1].clone());
+		}
+		return this._chaikin(result, iterations - 1);
+	}
+
 	_subscribeEvents(isOn: boolean) {
-		const func = isOn? 'on': 'off';
+		const func = isOn ? 'on' : 'off';
 
 		this.node[func](GameEvent.PATH_UPDATE_POINTS.toString(), this.onPathUpdatePoints, this);
 	}
@@ -203,13 +259,7 @@ export class Path extends Component {
 	// region event handlers
 	onPathUpdatePoints() {
 		this._pathBasePoints = this.node.children.slice(0, this._pathBasePoints.length);
-
-		this._pathCurve = new BezierCurve(this._pathBasePoints, this.precision, this.curveDebugPointPrefab, this.curveDebugControlPrefab);
-		this._pathCurve.init(this.isLooped, this.isIn3DSpace);
-
-		this._pathPoints = this._pathCurve.getFullPath().points;
-		this._pathRotations = this._pathCurve.getFullPath().rotations;
-
+		this._buildSpline();
 		this.pathLength = this.getFullPathLength();
 
 		this.pathMovables.forEach(movable => {

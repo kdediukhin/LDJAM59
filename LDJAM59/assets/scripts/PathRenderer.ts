@@ -1,5 +1,4 @@
-import { _decorator, Component, instantiate, Material, Mesh, MeshRenderer, Node, Prefab } from 'cc';
-import { BezierCurve } from './mover/BezierCurve';
+import { _decorator, Color, Component, GradientRange, instantiate, Line, Material, MeshRenderer, Node, Prefab, Tween, tween, Vec3 } from 'cc';
 import { Path } from './mover/Path';
 const { ccclass, property } = _decorator;
 
@@ -12,6 +11,9 @@ export class PathRenderer extends Component {
 	@property(Prefab)
 	markPrefab;
 
+	@property(Prefab)
+	linePrefab: Prefab;
+
 	@property
 	marksInterval = .1;
 	// endregion
@@ -20,8 +22,10 @@ export class PathRenderer extends Component {
 	// endregion
 
 	// region private fields and properties
-	_curve: BezierCurve;
+	_path: Path;
 	_marks: Node[] = [];
+	_line: Line;
+	_tween: Tween | null = null;
 	// endregion
 
 	// region life-cycle callbacks
@@ -34,25 +38,20 @@ export class PathRenderer extends Component {
 	}
 
 	update(deltaTime: number) {
-		
+
 	}
 	// endregion
 
 	// region public methods
 	init() {
-		this._curve = this.getComponent(Path).getCurve();
+		this._path = this.getComponent(Path);
 
-		const fullLength = this._curve.getFullPathLength();
-
-		for (let distance = 0; distance < fullLength; distance += this.marksInterval) {
-			const {position, rotation} = this._curve.getPointAngleOnDistance(distance);
-			const mark = instantiate(this.markPrefab);
-			mark.setParent(this.node);
-			mark.setPosition(position);
-			mark.setWorldRotation(rotation);
-
-			this._marks.push(mark);			
-		}
+		const positions = this._path.getPathPoints();
+		const line = instantiate(this.linePrefab);
+		line.setParent(this.node);
+		this._line = line.getComponent(Line);
+		this._line.positions = positions;
+		this.setColorHex('#FFFFFF00');
 	}
 
 	toggleMarks(isOn: boolean) {
@@ -62,11 +61,31 @@ export class PathRenderer extends Component {
 	setMaterial(material: Material) {
 		this._marks.forEach(mark => mark.getComponentInChildren(MeshRenderer).setMaterialInstance(material, 0));
 	}
+
+	setColorHex(colorHex: string) {	
+		this._tween?.stop();	
+		const colorRange = new GradientRange();
+		const color = new Color();
+		color.fromHEX(colorHex);
+		colorRange.color = color;
+		this._line.color = colorRange;
+	}
+
+	fade(){
+		const colorRange = this._line.color;
+		this._tween = tween(colorRange)
+			.to(1, { color: new Color(colorRange.color.r, colorRange.color.g, colorRange.color.b, 0) }, {
+				onUpdate: () => {
+					this._line.color = colorRange;
+				}
+			})
+			.start();
+	}
 	// endregion
 
 	// region private methods
 	_subscribeEvents(isOn: boolean) {
-		const func = isOn? 'on': 'off';
+		const func = isOn ? 'on' : 'off';
 	}
 	// endregion
 
