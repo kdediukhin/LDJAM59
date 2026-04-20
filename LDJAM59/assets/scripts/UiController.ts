@@ -36,7 +36,7 @@ export class UiController extends Component {
     private _startingAttachBtnPos: Vec3 = null;
 
     onEnable() {
-        this._subscribeEvents(true);
+        this._subscribeEvents(true);//
     }
 
     protected onDisable(): void {

@@ -6,7 +6,7 @@ export class ButtonHover extends Component {
     @property(Sprite)
     hoverSprite: Sprite = null;
 
-   
+
     protected onEnable(): void {
         this._subscribeEvents(true);
         this.hoverSprite.node.active = false;
@@ -16,10 +16,15 @@ export class ButtonHover extends Component {
         this._subscribeEvents(false);
     }
 
-    private _subscribeEvents(isSubscribe: boolean) {   
-        const fn = isSubscribe ? 'on' : 'off'; 
+    private _subscribeEvents(isSubscribe: boolean) {
+        const fn = isSubscribe ? 'on' : 'off';
         this.node[fn](Node.EventType.MOUSE_ENTER, this._onMouseEnter, this);
         this.node[fn](Node.EventType.MOUSE_LEAVE, this._onMouseLeave, this);
+
+        this.node[fn](Node.EventType.TOUCH_START, this._onMouseEnter, this);
+        this.node[fn](Node.EventType.TOUCH_END, this._onMouseLeave, this);
+        this.node[fn](Node.EventType.TOUCH_CANCEL, this._onMouseLeave, this);
+
     }
 
     private _onMouseEnter() {
