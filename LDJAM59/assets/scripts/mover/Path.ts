@@ -24,6 +24,10 @@ export class Path extends Component {
 	@property
 	smoothIterations: number = 3;
 
+	// Натяжение кривой: 1 = стандартный Catmull-Rom, >1 = сильнее изгиб, <1 = более прямые
+	@property
+	curveTension: number = 1;
+
 	@property
 	isLooped: boolean = false;
 
@@ -176,14 +180,34 @@ export class Path extends Component {
 	}
 
 	// region private methods
+	private _cardinalPoint(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, t: number): Vec3 {
+		const s = this.curveTension * 0.5;
+		const t2 = t * t;
+		const t3 = t2 * t;
+		return new Vec3(
+			s * ((-t3 + 2*t2 - t) * p0.x + (3*t3 - 5*t2 + 2) * p1.x + (-3*t3 + 4*t2 + t) * p2.x + (t3 - t2) * p3.x),
+			s * ((-t3 + 2*t2 - t) * p0.y + (3*t3 - 5*t2 + 2) * p1.y + (-3*t3 + 4*t2 + t) * p2.y + (t3 - t2) * p3.y),
+			s * ((-t3 + 2*t2 - t) * p0.z + (3*t3 - 5*t2 + 2) * p1.z + (-3*t3 + 4*t2 + t) * p2.z + (t3 - t2) * p3.z),
+		);
+	}
+
 	private _buildSpline() {
-		const rawKnots = this._pathBasePoints.map((p) => p.getWorldPosition());
-		const knots = this._chaikin(rawKnots, this.smoothIterations);
-		this._spline.setModeAndKnots(geometry.SplineMode.CATMULL_ROM, knots);
+		const pts = this._pathBasePoints.map((p) => p.getWorldPosition());
+		const n = pts.length;
 
 		// Oversampled raw points for arc-length reparameterization
-		const oversample = this.precision * this._pathBasePoints.length * 10;
-		const raw = this._spline.getPoints(oversample);
+		const segSamples = this.precision * 10;
+		const raw: Vec3[] = [];
+		for (let i = 0; i < n - 1; i++) {
+			const p0 = pts[Math.max(i - 1, 0)];
+			const p1 = pts[i];
+			const p2 = pts[i + 1];
+			const p3 = pts[Math.min(i + 2, n - 1)];
+			for (let j = 0; j < segSamples; j++) {
+				raw.push(this._cardinalPoint(p0, p1, p2, p3, j / segSamples));
+			}
+		}
+		raw.push(pts[n - 1].clone());
 
 		// Build cumulative arc-length table
 		const arcLengths: number[] = [0];

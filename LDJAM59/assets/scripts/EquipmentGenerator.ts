@@ -49,7 +49,7 @@ export class EquipmentGenerator extends Component {
 
     private onCheckPlaceAvailability(node: Node, radius: number, callback: (isOn: boolean) => void) {
         let isAvailable = true;
-
+        this._staticObjects = this._staticObjects.filter(staticObject => staticObject.isValid);
         this._staticObjects.forEach(staticObject => {
             if (staticObject.node !== node && staticObject.checkCollision(node, radius)) {
                 isAvailable = false;

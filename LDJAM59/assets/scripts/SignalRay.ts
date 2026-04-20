@@ -63,6 +63,8 @@ export class SignalRay extends Component {
         const reflectorIndices: Set<number> = new Set();
         const passedAmplifiers: Set<Node> = new Set();
 
+        this._amplifierMap.clear();
+
         let origin = this.node.worldPosition.clone();
         let dir = new Vec3();
         Vec3.normalize(dir, this.direction);
