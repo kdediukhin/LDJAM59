@@ -87,7 +87,7 @@ export class EquipmentPlacer extends Component {
         this._rotationOffset = null;
         this._movementOffset = null;
 
-         this._isActivePlacer = isOn;
+        this._isActivePlacer = isOn;
         this.outline.active = isOn;
     }
 
@@ -147,6 +147,7 @@ export class EquipmentPlacer extends Component {
         if (!this._isActivePlacer) return;
         if (!this._isRotationMode) return;
         if (!button.node.isChildOf(this._uiNode)) return;
+        if (!currentPos) return;
 
         if (!this._rotationOffset) {
             this._rotationOffset = new Vec2(currentPos.x, currentPos.y);

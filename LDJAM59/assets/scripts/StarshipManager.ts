@@ -32,6 +32,7 @@ export class StarshipManager extends Component {
 
 	@property(Camera)
 	mainCamera: Camera;
+
 	// endregion
 
 	// region public fields and properties
@@ -101,7 +102,10 @@ export class StarshipManager extends Component {
 	}
 
 	_setStarshipOnPath(starship: Node, path: Path) {
+		console.log(path);
+
 		const startPos = path.getFullPath().points[0];
+
 		starship.setPosition(startPos);
 
 		const mover = starship.getComponent(MoverToPoint);
@@ -118,7 +122,8 @@ export class StarshipManager extends Component {
 	_setStarshipColor(material: Material, starship: Node, path: Path) {
 
 		starship.getComponentsInChildren(MeshRenderer).forEach(mesh => mesh.setMaterialInstance(material, 0));
-		path.getComponent(PathRenderer).setMaterial(material);
+		// path.getComponent(PathRenderer).setMaterial(material);
+		path.getComponent(PathRenderer).setColorHex(this._colorHex);
 
 	}
 
