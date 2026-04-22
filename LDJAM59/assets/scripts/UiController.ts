@@ -2,6 +2,7 @@ import { _decorator, Camera, Component, instantiate, Node, Prefab, Sprite, Vec2,
 import { gameEventTarget } from './plugins/GameEventTarget';
 import { GameEvent } from './enums/GameEvent';
 import { ScreenButton } from './input/ScreenButton';
+import { AttachableButtons } from './AttachableButtons';
 const { ccclass, property } = _decorator;
 
 @ccclass('UiController')
@@ -35,6 +36,7 @@ export class UiController extends Component {
 
     private _attachButtonsOffset: Vec2 = null;
     private _startingAttachBtnPos: Vec3 = null;
+    private _currentLevel: number = 0;
 
     onEnable() {
         this._subscribeEvents(true);//
@@ -60,7 +62,7 @@ export class UiController extends Component {
         gameEventTarget[func](GameEvent.DESTROY_ITEM, this.onDestroyItem, this);
         gameEventTarget[func](GameEvent.UPDATE_UI_POSITION, this.onUpdateUiPosition, this);
 
-
+        gameEventTarget[func](GameEvent.LEVEL_UPDATE, (level: number) => this._currentLevel = level, this);
     }
 
     private toggleStarshipUI(isPaused: boolean) {
@@ -91,6 +93,8 @@ export class UiController extends Component {
         const attachBtn = instantiate(this.attachBtnPrefab);
         attachBtn.getComponentsInChildren(ScreenButton).forEach(btn => btn.buttonName += `${node.uuid}`);
         attachBtn.setParent(this.canvasNode);
+
+        attachBtn.getComponent(AttachableButtons).setCurrentLevel(this._currentLevel);
 
         const worldPos = new Vec3();
         this.uiCamera.screenToWorld(uiPos, worldPos);

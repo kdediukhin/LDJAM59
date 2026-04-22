@@ -57,6 +57,9 @@ export class StarshipManager extends Component {
 	onEnable() {
 		this._cPathManager = this.pathManagers[0];
 		this._subscribeEvents(true);
+
+		
+
 	}
 
 	onDisable() {
@@ -73,7 +76,6 @@ export class StarshipManager extends Component {
 		const path = this._cPathManager.getAvaliablePath();
 		const starship = instantiate(this.starshipPrefab[Math.floor(Math.random() * this.starshipPrefab.length)]);
 		starship.setParent(this.node);
-		console.log(path);
 		if (!path) return;
 
 
@@ -117,7 +119,7 @@ export class StarshipManager extends Component {
 
 	_setStarshipOnPath(starship: Node, path: Path) {
 		const startPos = path.getFullPath().points[0];
-		starship.setPosition(startPos);
+		starship.setPosition(startPos);		
 
 		const mover = starship.getComponent(MoverToPoint);
 		mover.init(path, starship);
@@ -148,7 +150,7 @@ export class StarshipManager extends Component {
 	}
 
 	private _flyAwayStarship(starship: Node) {
-		starship.getComponentInChildren(SphereCollider).destroy();
+		starship && starship.getComponentInChildren(SphereCollider)?.destroy();
 
 		const particle = instantiate(this.particlesAcceptPrefab);
 		particle.setParent(starship);
@@ -190,7 +192,7 @@ export class StarshipManager extends Component {
 			const idx = this._starships.indexOf(starship);
 			if (idx > -1) this._starships.splice(idx, 1);
 			this._shipReceivers.delete(starship);
-			starship.destroy();
+			starship && starship.destroy();
 		});
 	}
 
@@ -272,10 +274,10 @@ export class StarshipManager extends Component {
 				this._cPathManager = this.pathManagers[3];
 				break;
 			case 4:
-				this._cPathManager = this.pathManagers[3];
+				this._cPathManager = this.pathManagers[4];
 				break;
 			case 5:
-				this._cPathManager = this.pathManagers[4];
+				this._cPathManager = this.pathManagers[5];
 				break;
 		}
 	}

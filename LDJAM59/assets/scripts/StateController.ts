@@ -30,18 +30,38 @@ export class StateController extends Component {
 	// region life-cycle callbacks
 	onEnable() {
 		this._levels = [
-			{countToReach: 0, starshipCount: 1},
-			{countToReach: 3, starshipCount: 2},
-			{countToReach: 5, starshipCount: 4},
-			{countToReach: 9, starshipCount: 6},
-			{countToReach: 13, starshipCount: 8},
-			{countToReach: 19, starshipCount: 10}
+			{ countToReach: 0, starshipCount: 1 },
+			{ countToReach: 3, starshipCount: 2 },
+			{ countToReach: 5, starshipCount: 4 },
+			{ countToReach: 9, starshipCount: 6 },
+			{ countToReach: 13, starshipCount: 8 },
+			{ countToReach: 19, starshipCount: 10 }
 		]
 
 		this._colorsNotUsed = Object.values(Colors).slice();
 		this.scheduleOnce(() => this._checkLevelAndStarships());
 
 		this._subscribeEvents(true);
+
+		// //test levels update
+		// [5, 8, 11, 14, 17].forEach(delay => {
+		// 	this.scheduleOnce(() => {
+		// 		this._cLevel++;
+
+		// 		gameEventTarget.emit(GameEvent.LEVEL_UPDATE, this._cLevel);
+
+		// 		if (this._cLevel === 2) {
+		// 			gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 1);
+		// 		} else if (this._cLevel === 3) {
+		// 			gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 2);
+		// 		} else if (this._cLevel === 5) {
+		// 			gameEventTarget.emit(GameEvent.CAMERA_TRANSITION, 3);
+		// 		}
+
+		// 		this._checkLevelAndStarships();
+		// 	}, delay);
+		// });
+		// //test levels update
 	}
 
 	onDisable() {
@@ -49,7 +69,7 @@ export class StateController extends Component {
 	}
 
 	update(deltaTime: number) {
-		
+
 	}
 	// endregion
 
@@ -58,7 +78,7 @@ export class StateController extends Component {
 
 	// region private methods
 	_subscribeEvents(isOn: boolean) {
-		const func = isOn? 'on': 'off';
+		const func = isOn ? 'on' : 'off';
 
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
 	}
@@ -68,7 +88,7 @@ export class StateController extends Component {
 			const nextLevelDesc = this._levels[this._cLevel + 1];
 
 			if (nextLevelDesc.countToReach <= this._successCount) {
-				this._cLevel ++;
+				this._cLevel++;
 
 				gameEventTarget.emit(GameEvent.LEVEL_UPDATE, this._cLevel);
 
@@ -101,17 +121,19 @@ export class StateController extends Component {
 		const colorIndex = Math.floor(Math.random() * this._colorsNotUsed.length)
 		const randColorHex = this._colorsNotUsed[colorIndex];
 		this._colorsNotUsed.splice(colorIndex, 1);
+		console.log('randColorHex', randColorHex);
+		
 		gameEventTarget.emit(GameEvent.LAUNCH_STARSHIP, randColorHex);
 	}
 	// endregion
 
 	// region event handlers
 	onRayHitSuccess(recieverNode: Node) {
-		
+
 		this._colorsNotUsed.push(recieverNode.getComponent(Receiver).colorHex as Colors);
 		this._successCount++;
 		this.scheduleOnce(() => {
-			this._checkLevelAndStarships();			
+			this._checkLevelAndStarships();
 		});
 	}
 	// endregion

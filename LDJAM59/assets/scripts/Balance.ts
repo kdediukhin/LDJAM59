@@ -16,6 +16,9 @@ export class Balance extends Component {
 	successReward = 10;
 
 	@property
+	destroyCashback = 5;
+
+	@property
 	failFine = 10;
 	// endregion
 
@@ -53,6 +56,7 @@ export class Balance extends Component {
 		gameEventTarget[func](GameEvent.RAY_HIT_SUCCESS, this.onRayHitSuccess, this);
 		gameEventTarget[func](GameEvent.RAY_HIT_FAIL, this.onRayHitFail, this);
 		gameEventTarget[func](GameEvent.REQUEST_PURCHASE, this.onRequestPurchase, this);
+		gameEventTarget[func](GameEvent.DESTROY_ITEM, this.onDestroyItem, this);
 	}
 
 	_updateBalance() {
@@ -61,6 +65,11 @@ export class Balance extends Component {
 	// endregion
 
 	// region event handlers
+	onDestroyItem() {
+		this._cBalance += this.destroyCashback;
+		this._updateBalance();
+	}
+
 	onRayHitSuccess() {
 		this._cBalance += this.successReward;
 		this._updateBalance();

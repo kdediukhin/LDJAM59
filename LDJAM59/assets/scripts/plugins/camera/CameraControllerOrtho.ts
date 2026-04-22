@@ -155,6 +155,7 @@ export class CameraControllerOrtho extends Component {
 			.call(() => {
 				this._cTarget = newSetup.target;
 				if (this.isMain && callback) { callback(); }
+				gameEventTarget.emit(GameEvent.CAMERA_TRANSITION_COMPLETE, this._cSetupIndex);
 			})
 			.start();
 	}

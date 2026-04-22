@@ -48,10 +48,6 @@ export class EquipmentPlacer extends Component {
         gameEventTarget.emit(GameEvent.ATTACH_UI_TO_PLACER, (uiNode) => {
             this._uiNode = uiNode;
         }, this.node, uiPos);
-        this.scheduleOnce(() => {
-            console.log(this._uiNode);
-        });
-
         this._subscribeEvents(true);
     }
 
